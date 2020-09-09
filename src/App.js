@@ -6,7 +6,7 @@ import { Login } from "components/Login";
 import { Signup } from 'components/Signup'
 import "./App.css";
 
-const NAVIGATION = [
+const NAVIGATION_LIST = [
   { label: "Карта", href: "map", isActive: true },
   { label: "Профиль", href: "profile", isActive: false },
   { label: "Логин", href: "login", isActive: false },
@@ -14,12 +14,12 @@ const NAVIGATION = [
 
 export class App extends Component {
   state = {
-    navigation: NAVIGATION,
+    navigation: NAVIGATION_LIST,
     pathname: window.location.pathname,
   };
 
   getShowingComponent = () => {
-    const LINK_TO_COMPONENT = {
+    const PATHNAME_TO_COMPONENT = {
       map: <Map />,
       profile: <Profile />,
       login: <Login handleChangePathname={this.handleChangePathname} />,
@@ -28,7 +28,7 @@ export class App extends Component {
 
     const { pathname } = this.state;
 
-    return LINK_TO_COMPONENT[pathname.slice(1)] || <Map />;
+    return PATHNAME_TO_COMPONENT[pathname.slice(1)] || <Map />;
   };
 
   handleChangePathname = (pathname) => {
@@ -57,7 +57,7 @@ export class App extends Component {
 
     return (
       <>
-        <Header navItems={navigation} handleChangePathname={this.handleChangePathname} />
+        <Header navList={navigation} handleChangePathname={this.handleChangePathname} />
         {component}
       </>
     );

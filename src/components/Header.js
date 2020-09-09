@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Header = ({ navItems, handleChangePathname }) => {
+export const Header = ({ navList, handleChangePathname }) => {
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -11,7 +11,7 @@ export const Header = ({ navItems, handleChangePathname }) => {
       Loft Taxi
       <nav>
         <ul>
-          {navItems.map(({ label, href, isActive }) => {
+          {navList.map(({ label, href, isActive }) => {
             const link = isActive ? (
               <a>{label}</a>
             ) : (
