@@ -6,13 +6,17 @@ export const Header = ({ navItems, handleClick }) => {
       Loft Taxi
       <nav>
         <ul>
-          {navItems.map(({ label, href, isActive }) => (
-            <li key={label}>
-              <a href={isActive ? null : href} onClick={handleClick}>
+          {navItems.map(({ label, href, isActive }) => {
+            const link = isActive ? (
+              <a>{label}</a>
+            ) : (
+              <a href={href} onClick={handleClick}>
                 {label}
               </a>
-            </li>
-          ))}
+            );
+
+            return <li key={label}>{link}</li>;
+          })}
         </ul>
       </nav>
     </header>
