@@ -1,9 +1,11 @@
 import React, {Component} from "react";
 
-export class Login extends Component {
+export class Signup extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    name: '',
+    surname: '',
   }
 
   handleInputChange = ({target}) => {
@@ -17,25 +19,34 @@ export class Login extends Component {
     handleChangePathname('/map')
   }
 
-  handleSignupClick = (e) => {
+  handleLoginClick = (e) => {
     e.preventDefault();
     const {handleChangePathname} = this.props;
-    handleChangePathname('/signup')
+    handleChangePathname('/login')
   }
 
   render () {
-    const {email, password} = this.state;
+    const {name, surname, email, password} = this.state;
 
     return (
       <div>
-        <h2>Логин</h2>
-        <div>Новый пользователь?<a href="/signup" onClick={this.handleSignupClick}>Зарегистрируйтесь</a></div>
+        <h2>Регистрация</h2>
+        <div>Уже зарегистрированы?<a href="/login" onClick={this.handleLoginClick}>Войти</a></div>
         <br/>
         <br/>
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor="email">Имя пользователя *</label>
+          <label htmlFor="email">Адрес электронной почты *</label>
           <br/>
           <input type="email" name="email" id="email" value={email} onChange={this.handleInputChange}/>
+          <br/>
+          <br/>
+          <label htmlFor="name">Имя *</label>
+          <br/>
+          <input type="text" name="name" id="name" value={name} onChange={this.handleInputChange}/>
+          <br/>
+          <label htmlFor="surname">Фамилия *</label>
+          <br/>
+          <input type="text" name="surname" id="surname" value={surname} onChange={this.handleInputChange}/>
           <br/>
           <br/>
           <label htmlFor="password">Пароль *</label>

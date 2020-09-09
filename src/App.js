@@ -3,6 +3,7 @@ import { Header } from "components/Header";
 import { Map } from "components/Map";
 import { Profile } from "components/Profile";
 import { Login } from "components/Login";
+import { Signup } from 'components/Signup'
 import "./App.css";
 
 const NAVIGATION = [
@@ -10,7 +11,6 @@ const NAVIGATION = [
   { label: "Профиль", href: "profile", isActive: false },
   { label: "Логин", href: "login", isActive: false },
 ];
-
 
 export class App extends Component {
   state = {
@@ -22,7 +22,8 @@ export class App extends Component {
     const LINK_TO_COMPONENT = {
       map: <Map />,
       profile: <Profile />,
-      login: <Login handleFormSubmit={this.handleFormSubmit} />,
+      login: <Login handleChangePathname={this.handleChangePathname} />,
+      signup: <Signup handleChangePathname={this.handleChangePathname} />
     };
 
     const { pathname } = this.state;
@@ -44,10 +45,6 @@ export class App extends Component {
       return { navigation: newNavigation };
     });
   };
-
-  handleFormSubmit = () => {
-    this.handleChangePathname('/map')
-  }
 
   componentDidUpdate() {
     const { pathname } = this.state;
