@@ -11,11 +11,6 @@ const NAVIGATION = [
   { label: "Логин", href: "login", isActive: false },
 ];
 
-const LINK_TO_COMPONENT = {
-  map: <Map />,
-  profile: <Profile />,
-  login: <Login />,
-};
 
 export class App extends Component {
   state = {
@@ -24,33 +19,35 @@ export class App extends Component {
   };
 
   getShowingComponent = () => {
+    const LINK_TO_COMPONENT = {
+      map: <Map />,
+      profile: <Profile />,
+      login: <Login handleFormSubmit={this.handleFormSubmit} />,
+    };
+
     const { pathname } = this.state;
 
     return LINK_TO_COMPONENT[pathname.slice(1)] || <Map />;
   };
 
-  handleChangePathname = (e) => {
-    e.preventDefault();
-    const pathname = e.target.pathname;
-
+  handleChangePathname = (pathname) => {
     this.setState({ pathname });
 
     this.setState(({ navigation }) => {
       const href = pathname.slice(1);
 
       const newNavigation = navigation.reduce((acc, item) => {
-        if (item.href === href) {
-          item.isActive = true;
-        } else {
-          item.isActive = false;
-        }
-
+        item.isActive = item.href === href;
         return [...acc, item];
       }, []);
 
       return { navigation: newNavigation };
     });
   };
+
+  handleFormSubmit = () => {
+    this.handleChangePathname('/map')
+  }
 
   componentDidUpdate() {
     const { pathname } = this.state;
@@ -63,7 +60,7 @@ export class App extends Component {
 
     return (
       <>
-        <Header navItems={navigation} handleClick={this.handleChangePathname} />
+        <Header navItems={navigation} handleChangePathname={this.handleChangePathname} />
         {component}
       </>
     );

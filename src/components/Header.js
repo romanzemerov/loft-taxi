@@ -1,6 +1,11 @@
 import React from "react";
 
-export const Header = ({ navItems, handleClick }) => {
+export const Header = ({ navItems, handleChangePathname }) => {
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    handleChangePathname(e.target.pathname)
+  }
   return (
     <header>
       Loft Taxi
