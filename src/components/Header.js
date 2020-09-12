@@ -1,26 +1,36 @@
-import React from "react";
+import React from 'react';
 
-export const Header = ({ navList, handleChangePathname }) => {
+const NAV_LIST = [
+  { label: 'Карта', linkTo: 'map' },
+  { label: 'Профиль', linkTo: 'profile' },
+  { label: 'Логин', linkTo: 'login' },
+];
 
+export const Header = ({ currentPage, handleChangePage }) => {
   const handleClick = (e) => {
-    e.preventDefault();
-    handleChangePathname(e.target.pathname)
-  }
+    handleChangePage(e.target.dataset.linkTo);
+  };
+
   return (
     <header>
       Loft Taxi
       <nav>
         <ul>
-          {navList.map(({ label, href, isActive }) => {
-            const link = isActive ? (
-              <a>{label}</a>
-            ) : (
-              <a href={href} onClick={handleClick}>
-                {label}
-              </a>
-            );
+          {NAV_LIST.map(({ label, linkTo }) => {
+            const isActive = currentPage === linkTo;
 
-            return <li key={label}>{link}</li>;
+            return (
+              <li key={label}>
+                <button
+                  style={{ pointerEvents: isActive ? 'none' : 'auto' }}
+                  data-link-to={linkTo}
+                  type={'button'}
+                  onClick={handleClick}
+                >
+                  {label}
+                </button>
+              </li>
+            );
           })}
         </ul>
       </nav>

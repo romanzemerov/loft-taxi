@@ -1,64 +1,46 @@
-import React, { Component } from "react";
-import { Header } from "components/Header";
-import { Map } from "components/Map";
-import { Profile } from "components/Profile";
-import { Login } from "components/Login";
-import { Signup } from 'components/Signup'
-import "./App.css";
-
-const NAVIGATION_LIST = [
-  { label: "Карта", href: "map", isActive: true },
-  { label: "Профиль", href: "profile", isActive: false },
-  { label: "Логин", href: "login", isActive: false },
-];
+import React, { Component } from 'react';
+import { Header } from 'components/Header';
+import { Map } from 'components/Map';
+import { Profile } from 'components/Profile';
+import { Login } from 'components/Login';
+import { Signup } from 'components/Signup';
+import './App.css';
 
 export class App extends Component {
   state = {
-    navigation: NAVIGATION_LIST,
-    pathname: window.location.pathname,
+    currentPage: window.location.pathname.slice(1),
   };
 
   getShowingComponent = () => {
-    const PATHNAME_TO_COMPONENT = {
+    const PAGE_TO_COMPONENT = {
       map: <Map />,
       profile: <Profile />,
-      login: <Login handleChangePathname={this.handleChangePathname} />,
-      signup: <Signup handleChangePathname={this.handleChangePathname} />
+      login: <Login handleChangePage={this.handleChangePage} />,
+      signup: <Signup handleChangePage={this.handleChangePage} />,
     };
 
-    const { pathname } = this.state;
+    const { currentPage } = this.state;
 
-    return PATHNAME_TO_COMPONENT[pathname.slice(1)] || <Map />;
+    return PAGE_TO_COMPONENT[currentPage] || <Map />;
   };
 
-  handleChangePathname = (pathname) => {
-    this.setState({ pathname });
-
-    this.setState(({ navigation }) => {
-      const href = pathname.slice(1);
-
-      const newNavigation = navigation.reduce((acc, item) => {
-        item.isActive = item.href === href;
-        return [...acc, item];
-      }, []);
-
-      return { navigation: newNavigation };
-    });
+  handleChangePage = (newPageName) => {
+    this.setState({ currentPage: newPageName });
   };
 
-  componentDidUpdate() {
-    const { pathname } = this.state;
-    window.history.pushState({}, null, pathname);
-  }
+  componentDidUpdate() {}
 
   render() {
-    const { navigation } = this.state;
-    const component = this.getShowingComponent();
+    const { currentPage } = this.state;
+    const showingComponent = this.getShowingComponent();
 
     return (
       <>
-        <Header navList={navigation} handleChangePathname={this.handleChangePathname} />
-        {component}
+        <Header
+          currentPage={currentPage}
+          handleChangePage={this.handleChangePage}
+        />
+        {showingComponent}
       </>
     );
   }
