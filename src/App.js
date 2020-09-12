@@ -28,8 +28,6 @@ export class App extends Component {
     this.setState({ currentPage: newPageName });
   };
 
-  componentDidUpdate() {}
-
   render() {
     const { currentPage } = this.state;
     const showingComponent = this.getShowingComponent();
