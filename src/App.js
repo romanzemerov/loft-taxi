@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { Header } from 'components/Header';
+import { Map } from 'components/Map';
+import { Profile } from 'components/Profile';
+import { Login } from 'components/Login';
+import { Signup } from 'components/Signup';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export class App extends Component {
+  state = {
+    currentPage: window.location.pathname.slice(1),
+  };
 
-export default App;
+  getShowingComponent = () => {
+    const PAGE_TO_COMPONENT = {
+      map: <Map />,
+      profile: <Profile />,
+      login: <Login handleChangePage={this.handleChangePage} />,
+      signup: <Signup handleChangePage={this.handleChangePage} />,
+    };
+
+    const { currentPage } = this.state;
+
+    return PAGE_TO_COMPONENT[currentPage] || <Map />;
+  };
+
+  handleChangePage = (newPageName) => {
+    this.setState({ currentPage: newPageName });
+  };
+
+  render() {
+    const { currentPage } = this.state;
+    const showingComponent = this.getShowingComponent();
+
+    return (
+      <>
+        <Header
+          currentPage={currentPage}
+          handleChangePage={this.handleChangePage}
+        />
+        {showingComponent}
+      </>
+    );
+  }
+}
