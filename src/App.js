@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { Header } from 'components/Header';
+import Header from 'components/Header';
 import { Map } from 'components/Map';
 import { Profile } from 'components/Profile';
 import { Login } from 'components/Login';
 import { Signup } from 'components/Signup';
+import { Container, Toolbar, withStyles, AppBar } from '@material-ui/core';
 import './App.css';
 
-export class App extends Component {
+const styles = () => ({
+  appBar: {
+    backgroundColor: '#fff',
+  },
+});
+
+class App extends Component {
   state = {
     currentPage: window.location.pathname.slice(1),
   };
@@ -31,15 +38,24 @@ export class App extends Component {
   render() {
     const { currentPage } = this.state;
     const showingComponent = this.getShowingComponent();
+    const { appBar } = this.props.classes;
 
     return (
       <>
-        <Header
-          currentPage={currentPage}
-          handleChangePage={this.handleChangePage}
-        />
+        <AppBar className={appBar} position={'static'}>
+          <Container>
+            <Toolbar>
+              <Header
+                currentPage={currentPage}
+                handleChangePage={this.handleChangePage}
+              />
+            </Toolbar>
+          </Container>
+        </AppBar>
         {showingComponent}
       </>
     );
   }
 }
+
+export default withStyles(styles)(App);
