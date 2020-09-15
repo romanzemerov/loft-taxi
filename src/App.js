@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Header from 'components/Header';
 import { Map } from 'components/Map';
 import { Profile } from 'components/Profile';
-import { Login } from 'components/Login';
-import { Signup } from 'components/Signup';
+import Login from 'components/Login';
+import Signup from 'components/Signup';
 import { Container, Toolbar, withStyles, AppBar } from '@material-ui/core';
 import './App.css';
 
