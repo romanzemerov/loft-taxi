@@ -7,11 +7,21 @@ import {
   withStyles,
   Link,
 } from '@material-ui/core';
+import { Logo } from 'loft-taxi-mui-theme';
+import backgroundImage from 'assets/background.jpg';
 
 const styles = () => ({
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: 'calc(100vh - 68px)',
+    backgroundImage: `url(${backgroundImage})`,
+  },
   form: {
     maxWidth: '500px',
     padding: '44px 60px',
+    marginLeft: '214px',
   },
   header: {
     marginBottom: '30px',
@@ -58,54 +68,56 @@ class Login extends Component {
   render() {
     const { email, password } = this.state;
     const { classes } = this.props;
-    const { form, header, subHeader, input, button } = classes;
+    const { wrapper, form, header, subHeader, input, button } = classes;
 
     return (
-      <Paper className={form}>
-        <Typography className={header} variant="h4">
-          Логин
-        </Typography>
-        <Typography className={subHeader} variant={'body1'}>
-          Новый пользователь?
-          <Link href="/signup" onClick={this.handleSignupClick}>
-            &nbsp;Зарегистрируйтесь
-          </Link>
-        </Typography>
-        <form onSubmit={this.handleSubmit}>
-          <TextField
-            className={input}
-            type="email"
-            name="email"
-            id="email"
-            label="Имя пользователя"
-            fullWidth={true}
-            value={email}
-            onChange={this.handleInputChange}
-            required={true}
-          />
+      <div className={wrapper}>
+        <Logo animated={true} white={true} />
+        <Paper className={form}>
+          <Typography className={header} variant="h4">
+            Логин
+          </Typography>
+          <Typography className={subHeader} variant={'body1'}>
+            Новый пользователь?
+            <Link href="/signup" onClick={this.handleSignupClick}>
+              &nbsp;Зарегистрируйтесь
+            </Link>
+          </Typography>
+          <form onSubmit={this.handleSubmit}>
+            <TextField
+              className={input}
+              type="email"
+              name="email"
+              id="email"
+              label="Имя пользователя"
+              fullWidth={true}
+              value={email}
+              onChange={this.handleInputChange}
+              required={true}
+            />
 
-          <TextField
-            className={input}
-            type="password"
-            name="password"
-            id="password"
-            label="Пароль"
-            fullWidth={true}
-            value={password}
-            onChange={this.handleInputChange}
-            required={true}
-          />
-          <br />
-          <Button
-            className={button}
-            type={'submit'}
-            variant={'contained'}
-            color={'primary'}
-          >
-            Войти
-          </Button>
-        </form>
-      </Paper>
+            <TextField
+              className={input}
+              type="password"
+              name="password"
+              id="password"
+              label="Пароль"
+              fullWidth={true}
+              value={password}
+              onChange={this.handleInputChange}
+              required={true}
+            />
+            <Button
+              className={button}
+              type={'submit'}
+              variant={'contained'}
+              color={'primary'}
+            >
+              Войти
+            </Button>
+          </form>
+        </Paper>
+      </div>
     );
   }
 }

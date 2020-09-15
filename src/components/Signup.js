@@ -7,11 +7,21 @@ import {
   withStyles,
   Link,
 } from '@material-ui/core';
+import { Logo } from 'loft-taxi-mui-theme';
+import backgroundImage from 'assets/background.jpg';
 
 const styles = () => ({
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: 'calc(100vh - 68px)',
+    backgroundImage: `url(${backgroundImage})`,
+  },
   form: {
     maxWidth: '500px',
     padding: '44px 60px',
+    marginLeft: '214px',
   },
   header: {
     marginBottom: '30px',
@@ -66,77 +76,88 @@ class Signup extends Component {
   render() {
     const { name, surname, email, password } = this.state;
     const { classes } = this.props;
-    const { form, header, subHeader, section, input, button } = classes;
+    const {
+      wrapper,
+      form,
+      header,
+      subHeader,
+      section,
+      input,
+      button,
+    } = classes;
 
     return (
-      <Paper className={form}>
-        <Typography className={header} variant="h4">
-          Регистрация
-        </Typography>
-        <Typography className={subHeader} variant={'body1'}>
-          Уже зарегистрированы?
-          <Link href="/login" onClick={this.handleLoginClick}>
-            &nbsp;Войти
-          </Link>
-        </Typography>
+      <div className={wrapper}>
+        <Logo animated={true} white={true} />
+        <Paper className={form}>
+          <Typography className={header} variant="h4">
+            Регистрация
+          </Typography>
+          <Typography className={subHeader} variant={'body1'}>
+            Уже зарегистрированы?
+            <Link href="/login" onClick={this.handleLoginClick}>
+              &nbsp;Войти
+            </Link>
+          </Typography>
 
-        <form onSubmit={this.handleSubmit}>
-          <TextField
-            className={input}
-            type="email"
-            name="email"
-            id="email"
-            label="Адрес электронной почты"
-            fullWidth={true}
-            value={email}
-            onChange={this.handleInputChange}
-            required={true}
-          />
-          <div className={section}>
+          <form onSubmit={this.handleSubmit}>
             <TextField
               className={input}
-              type="text"
-              name="name"
-              id="name"
-              label="Имя"
+              type="email"
+              name="email"
+              id="email"
+              label="Адрес электронной почты"
               fullWidth={true}
-              value={name}
+              value={email}
               onChange={this.handleInputChange}
               required={true}
             />
+            <div className={section}>
+              <TextField
+                className={input}
+                type="text"
+                name="name"
+                id="name"
+                label="Имя"
+                fullWidth={true}
+                value={name}
+                onChange={this.handleInputChange}
+                required={true}
+              />
+              <TextField
+                className={input}
+                type="text"
+                name="surname"
+                id="surname"
+                label="Фамилия"
+                fullWidth={true}
+                value={surname}
+                onChange={this.handleInputChange}
+                required={true}
+              />
+            </div>
             <TextField
               className={input}
-              type="text"
-              name="surname"
-              id="surname"
-              label="Фамилия"
+              type="password"
+              name="password"
+              id="password"
+              label="Пароль"
               fullWidth={true}
-              value={surname}
+              value={password}
               onChange={this.handleInputChange}
               required={true}
             />
-          </div>
-          <TextField
-            className={input}
-            type="password"
-            name="password"
-            id="password"
-            label="Пароль"
-            fullWidth={true}
-            value={password}
-            onChange={this.handleInputChange}
-            required={true}
-          />
-          <Button
-            className={button}
-            type={'submit'}
-            variant={'contained'}
-            color={'primary'}
-          >
-            Войти
-          </Button>
-        </form>
-      </Paper>
+            <Button
+              className={button}
+              type={'submit'}
+              variant={'contained'}
+              color={'primary'}
+            >
+              Войти
+            </Button>
+          </form>
+        </Paper>
+      </div>
     );
   }
 }
