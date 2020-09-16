@@ -3,10 +3,12 @@ import Map from 'components/Map';
 import Profile from 'components/Profile';
 import Login from 'components/Login';
 import Signup from 'components/Signup';
+import { AuthContext } from 'contexts/AuthContext';
 import './App.css';
 
 class App extends Component {
   state = {
+    isLoggedIn: false,
     currentPage: window.location.pathname.slice(1),
   };
 
@@ -26,21 +28,21 @@ class App extends Component {
           handleChangePage={this.handleChangePage}
         />
       ),
-      login: (
-        <Login
-          currentPage={currentPage}
-          handleChangePage={this.handleChangePage}
-        />
-      ),
-      signup: (
-        <Signup
-          currentPage={currentPage}
-          handleChangePage={this.handleChangePage}
-        />
-      ),
+      login: <Login handleChangePage={this.handleChangePage} />,
+      signup: <Signup handleChangePage={this.handleChangePage} />,
     };
 
     return PAGE_TO_COMPONENT[currentPage] || <Login />;
+  };
+
+  login = (email, password) => {
+    if (email && password) {
+      this.setState({ isLoggedIn: true });
+    }
+  };
+
+  logout = () => {
+    this.setState({ isLoggedIn: false });
   };
 
   handleChangePage = (newPageName) => {
@@ -48,8 +50,19 @@ class App extends Component {
   };
 
   render() {
+    const isLoggedIn = this.state;
     const showingComponent = this.getShowingComponent();
-    return <>{showingComponent}</>;
+    const authContextValue = {
+      isLoggedIn,
+      login: this.login,
+      logout: this.logout,
+    };
+
+    return (
+      <AuthContext.Provider value={authContextValue}>
+        {showingComponent}
+      </AuthContext.Provider>
+    );
   }
 }
 

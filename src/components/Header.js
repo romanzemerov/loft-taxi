@@ -1,9 +1,10 @@
-import React from 'react';
-import { Logo } from 'loft-taxi-mui-theme';
+import React, { useContext } from 'react';
+import { AuthContext } from 'contexts/AuthContext';
 import { AppBar, Button, Container, Toolbar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Logo } from 'loft-taxi-mui-theme';
 
-const styles = () => ({
+const useStyles = makeStyles({
   appBar: {
     backgroundColor: '#fff',
   },
@@ -23,14 +24,21 @@ const styles = () => ({
 const NAV_LIST = [
   { label: 'Карта', linkTo: 'map' },
   { label: 'Профиль', linkTo: 'profile' },
-  { label: 'Логин', linkTo: 'login' },
+  { label: 'Выйти', linkTo: 'login' },
 ];
 
-const Header = ({ currentPage, handleChangePage, classes }) => {
-  const { appBar, appBarInner, nav, navList, navItem } = classes;
+const Header = ({ currentPage, handleChangePage }) => {
+  const { appBar, appBarInner, nav, navList, navItem } = useStyles();
+  const { logout } = useContext(AuthContext);
 
   const handleClick = (e) => {
-    handleChangePage(e.currentTarget.dataset.linkTo);
+    const linkTo = e.currentTarget.dataset.linkTo;
+
+    if (linkTo === 'login') {
+      logout();
+    }
+
+    handleChangePage(linkTo);
   };
 
   return (
@@ -66,4 +74,4 @@ const Header = ({ currentPage, handleChangePage, classes }) => {
   );
 };
 
-export default withStyles(styles)(Header);
+export default Header;
