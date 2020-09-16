@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
-import Header from 'components/Header';
-import { Map } from 'components/Map';
-import { Profile } from 'components/Profile';
+import Map from 'components/Map';
+import Profile from 'components/Profile';
 import Login from 'components/Login';
 import Signup from 'components/Signup';
-import { Container, Toolbar, withStyles, AppBar } from '@material-ui/core';
 import './App.css';
-
-const styles = () => ({
-  appBar: {
-    backgroundColor: '#fff',
-  },
-});
 
 class App extends Component {
   state = {
@@ -19,16 +11,36 @@ class App extends Component {
   };
 
   getShowingComponent = () => {
-    const PAGE_TO_COMPONENT = {
-      map: <Map />,
-      profile: <Profile />,
-      login: <Login handleChangePage={this.handleChangePage} />,
-      signup: <Signup handleChangePage={this.handleChangePage} />,
-    };
-
     const { currentPage } = this.state;
 
-    return PAGE_TO_COMPONENT[currentPage] || <Map />;
+    const PAGE_TO_COMPONENT = {
+      map: (
+        <Map
+          currentPage={currentPage}
+          handleChangePage={this.handleChangePage}
+        />
+      ),
+      profile: (
+        <Profile
+          currentPage={currentPage}
+          handleChangePage={this.handleChangePage}
+        />
+      ),
+      login: (
+        <Login
+          currentPage={currentPage}
+          handleChangePage={this.handleChangePage}
+        />
+      ),
+      signup: (
+        <Signup
+          currentPage={currentPage}
+          handleChangePage={this.handleChangePage}
+        />
+      ),
+    };
+
+    return PAGE_TO_COMPONENT[currentPage] || <Login />;
   };
 
   handleChangePage = (newPageName) => {
@@ -36,26 +48,9 @@ class App extends Component {
   };
 
   render() {
-    const { currentPage } = this.state;
     const showingComponent = this.getShowingComponent();
-    const { appBar } = this.props.classes;
-
-    return (
-      <>
-        <AppBar className={appBar} position={'static'}>
-          <Container>
-            <Toolbar>
-              <Header
-                currentPage={currentPage}
-                handleChangePage={this.handleChangePage}
-              />
-            </Toolbar>
-          </Container>
-        </AppBar>
-        {showingComponent}
-      </>
-    );
+    return <>{showingComponent}</>;
   }
 }
 
-export default withStyles(styles)(App);
+export default App;

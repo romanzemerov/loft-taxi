@@ -1,10 +1,16 @@
 import React from 'react';
 import { Logo } from 'loft-taxi-mui-theme';
-import { Button } from '@material-ui/core';
+import { AppBar, Button, Container, Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core';
 
 const styles = () => ({
-  header: { display: 'flex', width: '100%' },
+  appBar: {
+    backgroundColor: '#fff',
+  },
+  appBarInner: {
+    display: 'flex',
+    width: '100%',
+  },
   nav: { marginLeft: 'auto' },
   navList: { display: 'flex' },
   navItem: {
@@ -21,36 +27,42 @@ const NAV_LIST = [
 ];
 
 const Header = ({ currentPage, handleChangePage, classes }) => {
-  const { header, nav, navList, navItem } = classes;
+  const { appBar, appBarInner, nav, navList, navItem } = classes;
 
   const handleClick = (e) => {
     handleChangePage(e.currentTarget.dataset.linkTo);
   };
 
   return (
-    <header className={header}>
-      <Logo />
-      <nav className={nav}>
-        <ul className={navList}>
-          {NAV_LIST.map(({ label, linkTo }) => {
-            const isActive = currentPage === linkTo;
+    <AppBar className={appBar} position={'static'}>
+      <Container>
+        <Toolbar>
+          <div className={appBarInner}>
+            <Logo />
+            <nav className={nav}>
+              <ul className={navList}>
+                {NAV_LIST.map(({ label, linkTo }) => {
+                  const isActive = currentPage === linkTo;
 
-            return (
-              <li className={navItem} key={label}>
-                <Button
-                  style={{ pointerEvents: isActive ? 'none' : 'auto' }}
-                  data-link-to={linkTo}
-                  type={'button'}
-                  onClick={handleClick}
-                >
-                  {label}
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-    </header>
+                  return (
+                    <li className={navItem} key={label}>
+                      <Button
+                        style={{ pointerEvents: isActive ? 'none' : 'auto' }}
+                        data-link-to={linkTo}
+                        type={'button'}
+                        onClick={handleClick}
+                      >
+                        {label}
+                      </Button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 
