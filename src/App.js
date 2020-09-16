@@ -4,6 +4,7 @@ import Profile from 'components/Profile';
 import Login from 'components/Login';
 import Signup from 'components/Signup';
 import { AuthContext } from 'contexts/AuthContext';
+import PropTypes from 'prop-types';
 
 const PROTECTED_ROUTES = ['map', 'profile'];
 
@@ -70,5 +71,13 @@ class App extends Component {
     );
   }
 }
+
+AuthContext.Provider.propTypes = {
+  value: PropTypes.exact({
+    isLoggedIn: PropTypes.bool.isRequired,
+    login: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+  }),
+};
 
 export default App;

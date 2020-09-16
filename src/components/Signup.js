@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from 'contexts/AuthContext';
 import { Button, Paper, TextField, Typography, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import { Logo } from 'loft-taxi-mui-theme';
 import backgroundImage from 'assets/background.jpg';
 
@@ -153,6 +154,10 @@ const Signup = ({ handleChangePage }) => {
       </Paper>
     </div>
   );
+};
+
+Signup.propTypes = {
+  handleChangePage: PropTypes.func.isRequired,
 };
 
 export default Signup;

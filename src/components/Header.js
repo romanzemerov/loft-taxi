@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from 'contexts/AuthContext';
 import { AppBar, Button, Container, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 import { Logo } from 'loft-taxi-mui-theme';
 
 const useStyles = makeStyles({
@@ -72,6 +73,11 @@ const Header = ({ currentPage, handleChangePage }) => {
       </Container>
     </AppBar>
   );
+};
+
+Header.propTypes = {
+  currentPage: PropTypes.string.isRequired,
+  handleChangePage: PropTypes.func.isRequired,
 };
 
 export default Header;
