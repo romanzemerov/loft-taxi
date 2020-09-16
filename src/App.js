@@ -6,6 +6,8 @@ import Signup from 'components/Signup';
 import { AuthContext } from 'contexts/AuthContext';
 import './App.css';
 
+const PROTECTED_ROUTES = ['map', 'profile'];
+
 class App extends Component {
   state = {
     isLoggedIn: false,
@@ -13,7 +15,11 @@ class App extends Component {
   };
 
   getShowingComponent = () => {
-    const { currentPage } = this.state;
+    const { isLoggedIn, currentPage } = this.state;
+
+    if (!isLoggedIn && PROTECTED_ROUTES.includes(currentPage)) {
+      return <Login />;
+    }
 
     const PAGE_TO_COMPONENT = {
       map: (
