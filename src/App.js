@@ -4,7 +4,6 @@ import Profile from 'components/Profile';
 import Login from 'components/Login';
 import Signup from 'components/Signup';
 import { AuthContext } from 'contexts/AuthContext';
-import './App.css';
 
 const PROTECTED_ROUTES = ['map', 'profile'];
 
