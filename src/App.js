@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Map from 'components/Map';
 import Profile from 'components/Profile';
 import Login from 'components/Login';
@@ -8,69 +8,61 @@ import PropTypes from 'prop-types';
 
 const PROTECTED_ROUTES = ['map', 'profile'];
 
-class App extends Component {
-  state = {
-    isLoggedIn: false,
-    currentPage: window.location.pathname.slice(1),
-  };
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentPage, setCurrentPage] = useState(
+    window.location.pathname.slice(1),
+  );
 
-  getShowingComponent = () => {
-    const { isLoggedIn, currentPage } = this.state;
-
-    if (!isLoggedIn && PROTECTED_ROUTES.includes(currentPage)) {
-      return <Login />;
-    }
-
+  const getShowingComponent = () => {
     const PAGE_TO_COMPONENT = {
       map: (
-        <Map
-          currentPage={currentPage}
-          handleChangePage={this.handleChangePage}
-        />
+        <Map currentPage={currentPage} handleChangePage={handleChangePage} />
       ),
       profile: (
         <Profile
           currentPage={currentPage}
-          handleChangePage={this.handleChangePage}
+          handleChangePage={handleChangePage}
         />
       ),
-      login: <Login handleChangePage={this.handleChangePage} />,
-      signup: <Signup handleChangePage={this.handleChangePage} />,
+      login: <Login handleChangePage={handleChangePage} />,
+      signup: <Signup handleChangePage={handleChangePage} />,
     };
+    const defaultComponent = PAGE_TO_COMPONENT['login'];
 
-    return PAGE_TO_COMPONENT[currentPage] || <Login />;
+    if (!isLoggedIn && PROTECTED_ROUTES.includes(currentPage)) {
+      return defaultComponent;
+    }
+
+    return PAGE_TO_COMPONENT[currentPage] || defaultComponent;
   };
 
-  login = (email, password) => {
+  const login = (email, password) => {
     if (email && password) {
-      this.setState({ isLoggedIn: true });
+      setIsLoggedIn(true);
     }
   };
 
-  logout = () => {
-    this.setState({ isLoggedIn: false });
+  const logout = () => {
+    setIsLoggedIn(false);
   };
 
-  handleChangePage = (newPageName) => {
-    this.setState({ currentPage: newPageName });
+  const handleChangePage = (newPageName) => {
+    setCurrentPage(newPageName);
   };
 
-  render() {
-    const isLoggedIn = this.state;
-    const showingComponent = this.getShowingComponent();
-    const authContextValue = {
-      isLoggedIn,
-      login: this.login,
-      logout: this.logout,
-    };
+  const authContextValue = {
+    isLoggedIn,
+    login,
+    logout,
+  };
 
-    return (
-      <AuthContext.Provider value={authContextValue}>
-        {showingComponent}
-      </AuthContext.Provider>
-    );
-  }
-}
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {getShowingComponent()}
+    </AuthContext.Provider>
+  );
+};
 
 AuthContext.Provider.propTypes = {
   value: PropTypes.exact({
