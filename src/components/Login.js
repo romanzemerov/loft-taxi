@@ -71,7 +71,7 @@ const Login = ({ handleChangePage }) => {
         </Typography>
         <Typography className={subHeader} variant={'body1'}>
           Новый пользователь?
-          <Link href="/signup" onClick={handleSignupClick}>
+          <Link href="/signup" onClick={handleSignupClick} data-testid={'link'}>
             &nbsp;Зарегистрируйтесь
           </Link>
         </Typography>
@@ -86,6 +86,9 @@ const Login = ({ handleChangePage }) => {
             value={email}
             onChange={handleInputChange}
             required={true}
+            inputProps={{
+              'data-testid': 'input-email',
+            }}
           />
 
           <TextField
@@ -98,12 +101,16 @@ const Login = ({ handleChangePage }) => {
             value={password}
             onChange={handleInputChange}
             required={true}
+            inputProps={{
+              'data-testid': 'input-password',
+            }}
           />
           <Button
             className={button}
             type={'submit'}
             variant={'contained'}
             color={'primary'}
+            data-testid={'login-button'}
           >
             Войти
           </Button>

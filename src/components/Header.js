@@ -23,9 +23,9 @@ const useStyles = makeStyles({
 });
 
 const NAV_LIST = [
-  { label: 'Карта', linkTo: 'map' },
-  { label: 'Профиль', linkTo: 'profile' },
-  { label: 'Выйти', linkTo: 'login' },
+  { id: 'map', label: 'Карта', linkTo: 'map' },
+  { id: 'profile', label: 'Профиль', linkTo: 'profile' },
+  { id: 'logout', label: 'Выйти', linkTo: 'login' },
 ];
 
 const Header = ({ currentPage, handleChangePage }) => {
@@ -50,14 +50,15 @@ const Header = ({ currentPage, handleChangePage }) => {
             <Logo />
             <nav className={nav}>
               <ul className={navList}>
-                {NAV_LIST.map(({ label, linkTo }) => {
+                {NAV_LIST.map(({ id, label, linkTo }) => {
                   const isActive = currentPage === linkTo;
 
                   return (
-                    <li className={navItem} key={label}>
+                    <li className={navItem} key={id}>
                       <Button
                         style={{ pointerEvents: isActive ? 'none' : 'auto' }}
                         data-link-to={linkTo}
+                        data-testid={id}
                         type={'button'}
                         onClick={handleClick}
                       >
