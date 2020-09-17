@@ -29,7 +29,11 @@ const Map = () => {
 
   return (
     <>
-      <div className={classes.map} ref={mapContainerRef}>
+      <div
+        className={classes.map}
+        ref={mapContainerRef}
+        data-testid={'mapSection'}
+      >
         Карта
       </div>
     </>
