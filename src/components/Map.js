@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
 
-const Map = () => {
+export const Map = () => {
   const classes = useStyles();
   const mapContainerRef = useRef(null);
 
@@ -28,16 +28,10 @@ const Map = () => {
   }, []);
 
   return (
-    <>
-      <div
-        className={classes.map}
-        ref={mapContainerRef}
-        data-testid={'mapSection'}
-      >
-        Карта
-      </div>
-    </>
+    <div className={classes.map} data-testid={'mapSection'}>
+      <div ref={mapContainerRef}>Карта</div>
+    </div>
   );
 };
 
-export default withHeader(Map);
+export const MapWithHeader = withHeader(Map);

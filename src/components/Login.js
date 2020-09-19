@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 const Login = ({ handleChangePage }) => {
   const [{ email, password }, setUser] = useState({ email: '', password: '' });
   const { wrapper, form, header, subHeader, input, button } = useStyles();
-  const { isLoggedIn, login, logout } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;

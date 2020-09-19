@@ -11,7 +11,9 @@ describe('Signup', () => {
     handleChangePageMock = jest.fn();
 
     const authContextValue = {
+      isLoggedIn: true,
       login: jest.fn(),
+      logout: jest.fn(),
     };
 
     const queries = render(

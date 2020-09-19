@@ -1,8 +1,8 @@
 import React from 'react';
 import { withHeader } from 'HOCs/withHeader';
 
-const Profile = () => {
+export const Profile = () => {
   return <div>Профиль</div>;
 };
 
-export default withHeader(Profile);
+export const ProfileWithHeader = withHeader(Profile);

@@ -11,7 +11,9 @@ describe('Login', () => {
     handleChangePageMock = jest.fn();
 
     const authContextValue = {
+      isLoggedIn: true,
       login: jest.fn(),
+      logout: jest.fn(),
     };
 
     const queries = render(
@@ -28,10 +30,10 @@ describe('Login', () => {
   });
 
   it('renders correctly', () => {
-    expect(getByTestId('link')).toBeTruthy();
-    expect(getByTestId('input-email')).toBeTruthy();
-    expect(getByTestId('input-password')).toBeTruthy();
-    expect(getByTestId('login-button')).toBeTruthy();
+    expect(getByTestId('link')).toBeInTheDocument();
+    expect(getByTestId('input-email')).toBeInTheDocument();
+    expect(getByTestId('input-password')).toBeInTheDocument();
+    expect(getByTestId('login-button')).toBeInTheDocument();
   });
 
   it('updates email input on change', () => {

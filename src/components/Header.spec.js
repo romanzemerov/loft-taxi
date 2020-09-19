@@ -11,6 +11,8 @@ describe('Header', () => {
       const handleChangePageMock = jest.fn();
 
       const authContextValue = {
+        isLoggedIn: true,
+        login: jest.fn(),
         logout: jest.fn(),
       };
 
@@ -35,9 +37,9 @@ describe('Header', () => {
     const { container } = renderedContainer();
     const { getByTestId } = container;
 
-    expect(getByTestId('map')).toBeTruthy();
-    expect(getByTestId('profile')).toBeTruthy();
-    expect(getByTestId('logout')).toBeTruthy();
+    expect(getByTestId('map')).toBeInTheDocument();
+    expect(getByTestId('profile')).toBeInTheDocument();
+    expect(getByTestId('logout')).toBeInTheDocument();
   });
 
   it('calls logout function and callback after clicking logout button', () => {

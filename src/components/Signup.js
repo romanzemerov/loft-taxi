@@ -60,7 +60,7 @@ const Signup = ({ handleChangePage }) => {
     input,
     button,
   } = useStyles();
-  const { isLoggedIn, login, logout } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
