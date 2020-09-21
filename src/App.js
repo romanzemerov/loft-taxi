@@ -1,45 +1,49 @@
-import React, { Component } from 'react';
-import { Header } from 'components/Header';
-import { Map } from 'components/Map';
-import { Profile } from 'components/Profile';
-import { Login } from 'components/Login';
-import { Signup } from 'components/Signup';
-import './App.css';
+import React, { useContext, useState } from 'react';
+import { MapWithHeader } from 'components/Map';
+import { ProfileWithHeader } from 'components/Profile';
+import Login from 'components/Login';
+import Signup from 'components/Signup';
+import { AuthContext } from 'contexts/AuthContext';
 
-export class App extends Component {
-  state = {
-    currentPage: window.location.pathname.slice(1),
-  };
+const PROTECTED_ROUTES = ['map', 'profile'];
 
-  getShowingComponent = () => {
+const App = () => {
+  const [currentPage, setCurrentPage] = useState(
+    window.location.pathname.slice(1),
+  );
+  const { isLoggedIn } = useContext(AuthContext);
+
+  const getShowingComponent = () => {
     const PAGE_TO_COMPONENT = {
-      map: <Map />,
-      profile: <Profile />,
-      login: <Login handleChangePage={this.handleChangePage} />,
-      signup: <Signup handleChangePage={this.handleChangePage} />,
-    };
-
-    const { currentPage } = this.state;
-
-    return PAGE_TO_COMPONENT[currentPage] || <Map />;
-  };
-
-  handleChangePage = (newPageName) => {
-    this.setState({ currentPage: newPageName });
-  };
-
-  render() {
-    const { currentPage } = this.state;
-    const showingComponent = this.getShowingComponent();
-
-    return (
-      <>
-        <Header
+      map: (
+        <MapWithHeader
           currentPage={currentPage}
-          handleChangePage={this.handleChangePage}
+          handleChangePage={handleChangePage}
         />
-        {showingComponent}
-      </>
-    );
-  }
-}
+      ),
+      profile: (
+        <ProfileWithHeader
+          currentPage={currentPage}
+          handleChangePage={handleChangePage}
+        />
+      ),
+      login: <Login handleChangePage={handleChangePage} />,
+      signup: <Signup handleChangePage={handleChangePage} />,
+    };
+    const defaultComponent = PAGE_TO_COMPONENT['login'];
+
+    if (!isLoggedIn && PROTECTED_ROUTES.includes(currentPage)) {
+      return defaultComponent;
+    }
+
+    return PAGE_TO_COMPONENT[currentPage] || defaultComponent;
+  };
+
+  const handleChangePage = (newPageName) => {
+    setCurrentPage(newPageName);
+  };
+
+  return getShowingComponent();
+};
+
+export default App;

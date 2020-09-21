@@ -1,67 +1,127 @@
-import React, { Component } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from 'contexts/AuthContext';
+import { Button, Paper, TextField, Typography, Link } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { Logo } from 'loft-taxi-mui-theme';
+import backgroundImage from 'assets/background.jpg';
 
-export class Login extends Component {
-  state = {
-    email: '',
-    password: '',
-  };
+const useStyles = makeStyles({
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    backgroundImage: `url(${backgroundImage})`,
+  },
+  form: {
+    maxWidth: '500px',
+    padding: '44px 60px',
+    marginLeft: '214px',
+  },
+  header: {
+    marginBottom: '30px',
+  },
+  subHeader: {
+    marginBottom: '40px',
+  },
+  input: {
+    marginBottom: '32px',
+    '&:last-of-type': {
+      marginBottom: '0',
+    },
+  },
+  button: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginTop: '40px',
+  },
+});
 
-  handleInputChange = ({ target }) => {
+const Login = ({ handleChangePage }) => {
+  const [{ email, password }, setUser] = useState({ email: '', password: '' });
+  const { wrapper, form, header, subHeader, input, button } = useStyles();
+  const { login } = useContext(AuthContext);
+
+  const handleInputChange = ({ target }) => {
     const { name, value } = target;
-    this.setState({ [name]: value });
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { handleChangePage } = this.props;
+    login(email, password);
     handleChangePage('map');
   };
 
-  handleSignupClick = (e) => {
+  const handleSignupClick = (e) => {
     e.preventDefault();
-    const { handleChangePage } = this.props;
     handleChangePage('signup');
   };
 
-  render() {
-    const { email, password } = this.state;
-
-    return (
-      <div>
-        <h2>Логин</h2>
-        <div>
+  return (
+    <div className={wrapper}>
+      <Logo animated={true} white={true} />
+      <Paper className={form}>
+        <Typography className={header} variant="h4">
+          Логин
+        </Typography>
+        <Typography className={subHeader} variant={'body1'}>
           Новый пользователь?
-          <a href="/signup" onClick={this.handleSignupClick}>
-            Зарегистрируйтесь
-          </a>
-        </div>
-        <br />
-        <br />
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="email">Имя пользователя *</label>
-          <br />
-          <input
+          <Link href="/signup" onClick={handleSignupClick} data-testid={'link'}>
+            &nbsp;Зарегистрируйтесь
+          </Link>
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            className={input}
             type="email"
             name="email"
             id="email"
+            label="Имя пользователя"
+            fullWidth={true}
             value={email}
-            onChange={this.handleInputChange}
+            onChange={handleInputChange}
+            required={true}
+            inputProps={{
+              'data-testid': 'input-email',
+            }}
           />
-          <br />
-          <br />
-          <label htmlFor="password">Пароль *</label>
-          <br />
-          <input
+
+          <TextField
+            className={input}
             type="password"
             name="password"
             id="password"
+            label="Пароль"
+            fullWidth={true}
             value={password}
-            onChange={this.handleInputChange}
+            onChange={handleInputChange}
+            required={true}
+            inputProps={{
+              'data-testid': 'input-password',
+            }}
           />
-          <br />
-          <button>Войти</button>
+          <Button
+            className={button}
+            type={'submit'}
+            variant={'contained'}
+            color={'primary'}
+            data-testid={'login-button'}
+          >
+            Войти
+          </Button>
         </form>
-      </div>
-    );
-  }
-}
+      </Paper>
+    </div>
+  );
+};
+
+Login.propTypes = {
+  handleChangePage: PropTypes.func.isRequired,
+};
+
+export default Login;

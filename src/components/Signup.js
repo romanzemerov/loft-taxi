@@ -1,90 +1,176 @@
-import React, { Component } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from 'contexts/AuthContext';
+import { Button, Paper, TextField, Typography, Link } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { Logo } from 'loft-taxi-mui-theme';
+import backgroundImage from 'assets/background.jpg';
 
-export class Signup extends Component {
-  state = {
+const useStyles = makeStyles({
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    backgroundImage: `url(${backgroundImage})`,
+  },
+  form: {
+    maxWidth: '500px',
+    padding: '44px 60px',
+    marginLeft: '214px',
+  },
+  header: {
+    marginBottom: '30px',
+  },
+  subHeader: {
+    marginBottom: '40px',
+  },
+  section: {
+    display: 'flex',
+    '& > *': {
+      marginRight: '16px',
+    },
+  },
+  input: {
+    marginBottom: '32px',
+    '&:last-of-type': {
+      marginBottom: '0',
+    },
+  },
+  button: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginTop: '40px',
+  },
+});
+
+const Signup = ({ handleChangePage }) => {
+  const [{ email, password, name, surname }, setUser] = useState({
     email: '',
     password: '',
     name: '',
     surname: '',
-  };
+  });
+  const {
+    wrapper,
+    form,
+    header,
+    subHeader,
+    section,
+    input,
+    button,
+  } = useStyles();
+  const { login } = useContext(AuthContext);
 
-  handleInputChange = ({ target }) => {
+  const handleInputChange = ({ target }) => {
     const { name, value } = target;
-    this.setState({ [name]: value });
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { handleChangePage } = this.props;
+    login(email, password);
     handleChangePage('map');
   };
 
-  handleLoginClick = (e) => {
+  const handleLoginClick = (e) => {
     e.preventDefault();
-    const { handleChangePage } = this.props;
     handleChangePage('login');
   };
 
-  render() {
-    const { name, surname, email, password } = this.state;
-
-    return (
-      <div>
-        <h2>Регистрация</h2>
-        <div>
+  return (
+    <div className={wrapper}>
+      <Logo animated={true} white={true} />
+      <Paper className={form}>
+        <Typography className={header} variant="h4">
+          Регистрация
+        </Typography>
+        <Typography className={subHeader} variant={'body1'}>
           Уже зарегистрированы?
-          <a href="/login" onClick={this.handleLoginClick}>
-            Войти
-          </a>
-        </div>
-        <br />
-        <br />
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="email">Адрес электронной почты *</label>
-          <br />
-          <input
+          <Link href="/login" onClick={handleLoginClick} data-testid={'link'}>
+            &nbsp;Войти
+          </Link>
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
+          <TextField
+            className={input}
             type="email"
             name="email"
             id="email"
+            label="Адрес электронной почты"
+            fullWidth={true}
             value={email}
-            onChange={this.handleInputChange}
+            onChange={handleInputChange}
+            required={true}
+            inputProps={{
+              'data-testid': 'input-email',
+            }}
           />
-          <br />
-          <br />
-          <label htmlFor="name">Имя *</label>
-          <br />
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={name}
-            onChange={this.handleInputChange}
-          />
-          <br />
-          <label htmlFor="surname">Фамилия *</label>
-          <br />
-          <input
-            type="text"
-            name="surname"
-            id="surname"
-            value={surname}
-            onChange={this.handleInputChange}
-          />
-          <br />
-          <br />
-          <label htmlFor="password">Пароль *</label>
-          <br />
-          <input
+          <div className={section}>
+            <TextField
+              className={input}
+              type="text"
+              name="name"
+              id="name"
+              label="Имя"
+              fullWidth={true}
+              value={name}
+              onChange={handleInputChange}
+              required={true}
+              inputProps={{
+                'data-testid': 'input-name',
+              }}
+            />
+            <TextField
+              className={input}
+              type="text"
+              name="surname"
+              id="surname"
+              label="Фамилия"
+              fullWidth={true}
+              value={surname}
+              onChange={handleInputChange}
+              required={true}
+              inputProps={{
+                'data-testid': 'input-surname',
+              }}
+            />
+          </div>
+          <TextField
+            className={input}
             type="password"
             name="password"
             id="password"
+            label="Пароль"
+            fullWidth={true}
             value={password}
-            onChange={this.handleInputChange}
+            onChange={handleInputChange}
+            required={true}
+            inputProps={{
+              'data-testid': 'input-password',
+            }}
           />
-          <br />
-          <button>Войти</button>
+          <Button
+            className={button}
+            type={'submit'}
+            variant={'contained'}
+            color={'primary'}
+            data-testid={'signup-button'}
+          >
+            Войти
+          </Button>
         </form>
-      </div>
-    );
-  }
-}
+      </Paper>
+    </div>
+  );
+};
+
+Signup.propTypes = {
+  handleChangePage: PropTypes.func.isRequired,
+};
+
+export default Signup;
