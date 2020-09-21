@@ -28,8 +28,10 @@ export const Map = () => {
   }, []);
 
   return (
-    <div className={classes.map} data-testid={'mapSection'}>
-      <div ref={mapContainerRef}>Карта</div>
+    <div data-testid={'mapSection'}>
+      <div className={classes.map} ref={mapContainerRef}>
+        Карта
+      </div>
     </div>
   );
 };
