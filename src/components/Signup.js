@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from 'contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
   Paper,
@@ -9,6 +8,9 @@ import {
   Link as MaterialLink,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { registerRequest } from 'redux/auth/actions';
+import { connect } from 'react-redux';
+import { getIsLoading, getIsLoggedIn } from 'redux/auth/reducers';
 
 const useStyles = makeStyles({
   form: {
@@ -40,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Signup = () => {
+const Signup = ({ isLoggedIn, isLoading, registerRequest }) => {
   const [{ email, password, name, surname }, setUser] = useState({
     email: '',
     password: '',
@@ -48,7 +50,6 @@ const Signup = () => {
     surname: '',
   });
   const { form, header, subHeader, section, input, button } = useStyles();
-  const { login } = useContext(AuthContext);
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
@@ -60,8 +61,10 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password);
+    registerRequest({ email, password, name, surname });
   };
+
+  if (isLoggedIn) return <Redirect to={'/map'} />;
 
   return (
     <Paper className={form}>
@@ -140,12 +143,22 @@ const Signup = () => {
           variant={'contained'}
           color={'primary'}
           data-testid={'signup-button'}
+          disabled={isLoading}
         >
-          Войти
+          Зарегистрироваться
         </Button>
       </form>
     </Paper>
   );
 };
 
-export default Signup;
+const mapStateToProps = (state) => ({
+  isLoggedIn: getIsLoggedIn(state),
+  isLoading: getIsLoading(state),
+});
+
+const mapDispatchToProps = {
+  registerRequest,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

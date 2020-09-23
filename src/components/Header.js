@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { AuthContext } from 'contexts/AuthContext';
 import { AppBar, Button, Container, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Logo } from 'loft-taxi-mui-theme';
+import { logout } from 'redux/auth/actions';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
   appBar: {
@@ -28,9 +29,8 @@ const NAV_LIST = [
   { id: 'logout', label: 'Выйти', linkTo: 'login' },
 ];
 
-const Header = () => {
+const Header = ({ logout }) => {
   const { appBar, appBarInner, nav, navList, navItem } = useStyles();
-  const { logout } = useContext(AuthContext);
   const history = useHistory();
   const activePage = history.location.pathname.slice(1);
 
@@ -78,4 +78,8 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapDispatchToProps = {
+  logout,
+};
+
+export default connect(null, mapDispatchToProps)(Header);

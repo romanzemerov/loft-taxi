@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from 'contexts/AuthContext';
+import React, { useState } from 'react';
+import { loginRequest } from 'redux/auth/actions';
+import { connect } from 'react-redux';
+
 import {
   Button,
   Paper,
@@ -9,7 +11,8 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Redirect, useHistory, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
+import { getIsLoading, getIsLoggedIn } from 'redux/auth/reducers';
 
 const useStyles = makeStyles({
   form: {
@@ -35,11 +38,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Login = () => {
-  const [{ email, password }, setUser] = useState({ email: '', password: '' });
+const Login = ({ isLoggedIn, isLoading, loginRequest }) => {
+  const [{ email, password }, setUser] = useState({
+    email: '',
+    password: '',
+  });
   const { form, header, subHeader, input, button } = useStyles();
-  const { isLoggedIn, login } = useContext(AuthContext);
-  const history = useHistory();
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
@@ -51,7 +55,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password);
+    loginRequest({ email, password });
   };
 
   if (isLoggedIn) return <Redirect to={'/map'} />;
@@ -103,6 +107,7 @@ const Login = () => {
           variant={'contained'}
           color={'primary'}
           data-testid={'login-button'}
+          disabled={isLoading}
         >
           Войти
         </Button>
@@ -111,4 +116,13 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  isLoggedIn: getIsLoggedIn(state),
+  isLoading: getIsLoading(state),
+});
+
+const mapDispatchToProps = {
+  loginRequest,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
