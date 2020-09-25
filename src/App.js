@@ -1,9 +1,9 @@
 import React from 'react';
 import PrivateRoute from 'components/PrivateRoute';
-import LoginPage from 'components/pages/LoginPage';
-import SignupPage from 'components/pages/SignupPage';
-import ProfilePage from 'components/pages/ProfilePage';
-import MapPage from 'components/pages/MapPage';
+import LoginPage from 'pages/LoginPage';
+import SignupPage from 'pages/SignupPage';
+import ProfilePage from 'pages/ProfilePage';
+import MapPage from 'pages/MapPage';
 import {
   BrowserRouter as Router,
   Switch,
