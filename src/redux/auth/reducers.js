@@ -65,9 +65,15 @@ export const getIsLoggedIn = createSelector(
   (state) => state.auth.isLoggedIn,
   (isLoggedIn) => isLoggedIn,
 );
+
 export const getIsLoading = createSelector(
   (state) => state.auth.isLoading,
   (isLoading) => isLoading,
 );
 
-export default { auth };
+export const getUserToken = createSelector(
+  (state) => state.auth.user,
+  ({ token }) => token,
+);
+
+export default auth;
