@@ -8,21 +8,26 @@ import {
   getCardFailure,
 } from 'redux/profile/actions';
 
+const transformCardProperties = ({
+  cardNumber,
+  expiryDate,
+  cardName,
+  cvc,
+}) => ({
+  number: cardNumber,
+  expireDate: expiryDate,
+  name: cardName,
+  secretCode: cvc,
+});
+
 export const profileMiddleware = (store) => (next) => (action) => {
   if (action.type === postCardRequest.type) {
     API.post('/card', action.payload)
       .then(({ data }) => {
         const { success, error } = data;
         if (success) {
-          console.log(action.payload);
-          const { cardNumber, expiryDate, cardName, cvc } = action.payload;
           store.dispatch(
-            postCardSuccess({
-              number: cardNumber,
-              expireDate: expiryDate,
-              name: cardName,
-              secretCode: cvc,
-            }),
+            postCardSuccess(transformCardProperties(action.payload)),
           );
         } else {
           store.dispatch(postCardFailure(error));
@@ -35,19 +40,12 @@ export const profileMiddleware = (store) => (next) => (action) => {
 
   if (action.type === getCardRequest.type) {
     API.get(`/card?token=${action.payload.token}`)
-      .then((response) => {
-        if (response.ok) {
-          const { cardNumber, expiryDate, cardName, cvc } = response.data;
-          store.dispatch(
-            getCardSuccess({
-              number: cardNumber,
-              expireDate: expiryDate,
-              name: cardName,
-              secretCode: cvc,
-            }),
-          );
+      .then(({ data }) => {
+        const { error } = data;
+        if (!error) {
+          store.dispatch(getCardSuccess(transformCardProperties(data)));
         } else {
-          store.dispatch(getCardFailure(response.statusText));
+          store.dispatch(getCardFailure(error));
         }
       })
       .catch((error) => {
