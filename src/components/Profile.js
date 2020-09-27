@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { store } from 'redux/store';
 import { connect } from 'react-redux';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { getUserToken } from 'redux/auth/reducers';
 import { postCardRequest, getCardRequest } from 'redux/profile/actions';
-import { getCard, getIsLoading } from 'redux/profile/reducers';
+import { getCard, getIsCardLoaded, getIsLoading } from 'redux/profile/reducers';
 import {
   StyledCard,
   StyledCardContent,
@@ -17,17 +17,14 @@ import {
 } from 'components/styledProfile';
 import { MCIcon } from 'loft-taxi-mui-theme';
 
-const Profile = ({ token, card, isLoading }) => {
-  const [{ number, expireDate, name, secretCode }, setCard] = useState(() => {
-    const { number, expireDate, name, secretCode } = card;
-
-    return {
-      number,
-      expireDate,
-      name,
-      secretCode,
-    };
-  });
+const Profile = memo(function Profile({
+  token,
+  creditCard,
+  isLoading,
+  isCardLoaded,
+}) {
+  const [card, setCard] = useState(creditCard);
+  const { number, expireDate, name, secretCode } = card;
 
   const handleInputChange = ({ target }) => {
     const { value, name } = target;
@@ -60,14 +57,14 @@ const Profile = ({ token, card, isLoading }) => {
   };
 
   useEffect(() => {
-    store.dispatch(getCardRequest({ token }));
-  }, [token]);
+    if (!isCardLoaded) {
+      store.dispatch(getCardRequest({ token }));
+    }
+  }, []);
 
   useEffect(() => {
-    if (card) {
-      setCard(card);
-    }
-  }, [card]);
+    setCard(creditCard);
+  }, [creditCard]);
 
   return (
     <StyledProfile>
@@ -143,12 +140,13 @@ const Profile = ({ token, card, isLoading }) => {
       </StyledFormWrapper>
     </StyledProfile>
   );
-};
+});
 
 const mapStateToProps = (state) => ({
   token: getUserToken(state),
-  card: getCard(state),
+  creditCard: getCard(state),
   isLoading: getIsLoading(state),
+  isCardLoaded: getIsCardLoaded(state),
 });
 
 const mapDispatchToProps = {
