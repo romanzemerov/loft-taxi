@@ -1,5 +1,4 @@
 import API from 'utils/API';
-
 import {
   loginFailure,
   loginRequest,
@@ -7,7 +6,9 @@ import {
   registerFailure,
   registerRequest,
   registerSuccess,
+  logout,
 } from 'redux/auth/actions';
+import { deleteState } from 'utils/localStorage';
 
 export const authMiddleware = (store) => (next) => (action) => {
   if (action.type === loginRequest.type) {
@@ -42,6 +43,10 @@ export const authMiddleware = (store) => (next) => (action) => {
       .catch((error) => {
         store.dispatch(registerFailure(error));
       });
+  }
+
+  if (action.type === logout.type) {
+    deleteState();
   }
 
   return next(action);

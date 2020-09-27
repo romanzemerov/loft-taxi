@@ -9,6 +9,12 @@ export const loadState = () => {
     return JSON.parse(serializedState);
   } catch (err) {
     return undefined;
+
+export const deleteState = () => {
+  try {
+    localStorage.removeItem('state');
+  } catch (err) {
+    console.error('Error while deleting state from localStorage');
   }
 };
 
