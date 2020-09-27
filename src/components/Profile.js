@@ -57,10 +57,10 @@ const Profile = memo(function Profile({
   };
 
   useEffect(() => {
-    if (!isCardLoaded) {
+    if (!isCardLoaded && !isLoading) {
       store.dispatch(getCardRequest({ token }));
     }
-  }, []);
+  }, [token, isCardLoaded, isLoading]);
 
   useEffect(() => {
     setCard(creditCard);

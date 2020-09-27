@@ -3,7 +3,6 @@ import Login from 'components/Login';
 import { makeStyles } from '@material-ui/core/styles';
 import { Logo } from 'loft-taxi-mui-theme';
 import backgroundImage from 'assets/background.jpg';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   loginPage: {
