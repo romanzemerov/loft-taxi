@@ -8,7 +8,9 @@ export const loadState = () => {
 
     return JSON.parse(serializedState);
   } catch (err) {
-    return undefined;
+    console.error('Error while loading state from localStorage');
+  }
+};
 
 export const deleteState = () => {
   try {
