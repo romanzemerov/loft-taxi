@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { makeStyles } from '@material-ui/core/styles';
-import { withHeader } from 'HOCs/withHeader';
 
 const useStyles = makeStyles({
   map: {
@@ -35,5 +34,3 @@ export const Map = () => {
     </div>
   );
 };
-
-export const MapWithHeader = withHeader(Map);
