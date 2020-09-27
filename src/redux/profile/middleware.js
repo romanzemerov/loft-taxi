@@ -1,5 +1,4 @@
 import API from 'utils/API';
-
 import {
   postCardRequest,
   postCardSuccess,
@@ -10,7 +9,6 @@ import {
 } from 'redux/profile/actions';
 
 export const profileMiddleware = (store) => (next) => (action) => {
-  console.log(action.type);
   if (action.type === postCardRequest.type) {
     API.post('/card', action.payload)
       .then(({ data }) => {
@@ -36,17 +34,25 @@ export const profileMiddleware = (store) => (next) => (action) => {
   }
 
   if (action.type === getCardRequest.type) {
-    API.get(`/card?token=${action.payload.token}`).then(({ data }) => {
-      const { cardNumber, expiryDate, cardName, cvc } = data;
-      store.dispatch(
-        getCardSuccess({
-          number: cardNumber,
-          expireDate: expiryDate,
-          name: cardName,
-          secretCode: cvc,
-        }),
-      );
-    });
+    API.get(`/card?token=${action.payload.token}`)
+      .then((response) => {
+        if (response.ok) {
+          const { cardNumber, expiryDate, cardName, cvc } = response.data;
+          store.dispatch(
+            getCardSuccess({
+              number: cardNumber,
+              expireDate: expiryDate,
+              name: cardName,
+              secretCode: cvc,
+            }),
+          );
+        } else {
+          store.dispatch(getCardFailure(response.statusText));
+        }
+      })
+      .catch((error) => {
+        store.dispatch(getCardFailure(error));
+      });
   }
 
   return next(action);
