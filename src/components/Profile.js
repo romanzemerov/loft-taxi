@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react';
 import { store } from 'redux/store';
 import { connect } from 'react-redux';
 import { Grid, TextField, Typography } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import { getUserToken } from 'redux/auth/reducers';
 import { postCardRequest, getCardRequest } from 'redux/profile/actions';
 import { getCard, getIsCardLoaded, getIsLoading } from 'redux/profile/reducers';
@@ -91,7 +91,7 @@ const Profile = memo(function Profile({
                     value={number}
                     onChange={handleInputChange}
                   />
-                  <DatePicker
+                  <KeyboardDatePicker
                     placeholder="ММ/ГГ"
                     label="Срок действия:"
                     format="MM/yy"
