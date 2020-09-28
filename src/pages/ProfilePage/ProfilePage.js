@@ -59,7 +59,7 @@ const ProfilePage = memo(function ProfilePage({
     if (!isCardLoaded && !isLoading) {
       getCardRequest({ token });
     }
-  }, [token, isCardLoaded, isLoading]);
+  }, [token, isCardLoaded, isLoading, getCardRequest]);
 
   useEffect(() => {
     setCard(creditCard);
