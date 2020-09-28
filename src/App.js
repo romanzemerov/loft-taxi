@@ -1,6 +1,6 @@
 import React from 'react';
 import PrivateRoute from 'components/PrivateRoute';
-import MainPageRoute from 'components/MainPageRoute';
+import PublicRoute from 'components/PublicRoute';
 import LoginPage from 'pages/LoginPage';
 import SignupPage from 'pages/SignupPage';
 import ProfilePage from 'pages/ProfilePage';
@@ -12,9 +12,9 @@ const App = () => {
     <>
       <Router>
         <Switch>
-          <MainPageRoute path={'/'} component={LoginPage} exact />
-          <MainPageRoute path={'/login'} component={LoginPage} />
-          <MainPageRoute path={'/signup'} component={SignupPage} />
+          <PublicRoute path={'/'} component={LoginPage} exact />
+          <PublicRoute path={'/login'} component={LoginPage} />
+          <PublicRoute path={'/signup'} component={SignupPage} />
           <PrivateRoute path={'/map'} component={MapPage} />
           <PrivateRoute path={'/profile'} component={ProfilePage} />
           <Redirect to={'/'} />

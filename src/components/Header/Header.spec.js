@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from 'components/Header';
+import Header from 'components/Header/index';
 import { fireEvent, render, cleanup } from '@testing-library/react';
 import { AuthContext } from 'contexts/AuthContext';
 
