@@ -1,4 +1,10 @@
 import React, { memo, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { getUserToken } from 'redux/auth/reducers';
+import { getCard, getIsCardLoaded, getIsLoading } from 'redux/profile/reducers';
+import { getCardRequest, postCardRequest } from 'redux/profile/actions';
+import { Grid, TextField, Typography } from '@material-ui/core';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import {
   StyledCard,
   StyledCardContent,
@@ -8,20 +14,15 @@ import {
   SubmitButton,
   SubtitleTypography,
 } from './StyledProfilePage';
-import { Grid, TextField, Typography } from '@material-ui/core';
 import { MCIcon } from 'loft-taxi-mui-theme';
-import { KeyboardDatePicker } from '@material-ui/pickers';
-import { getUserToken } from 'redux/auth/reducers';
-import { getCard, getIsCardLoaded, getIsLoading } from 'redux/profile/reducers';
-import { getCardRequest, postCardRequest } from 'redux/profile/actions';
-import { connect } from 'react-redux';
-import { store } from 'redux/store';
 
-const ProfilePage = memo(function Profile({
+const ProfilePage = memo(function ProfilePage({
   token,
   creditCard,
   isLoading,
   isCardLoaded,
+  postCardRequest,
+  getCardRequest,
 }) {
   const [card, setCard] = useState(creditCard);
   const { number, expireDate, name, secretCode } = card;
@@ -45,20 +46,18 @@ const ProfilePage = memo(function Profile({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    store.dispatch(
-      postCardRequest({
-        cardNumber: number,
-        expiryDate: expireDate,
-        cardName: name,
-        cvc: secretCode,
-        token,
-      }),
-    );
+    postCardRequest({
+      cardNumber: number,
+      expiryDate: expireDate,
+      cardName: name,
+      cvc: secretCode,
+      token,
+    });
   };
 
   useEffect(() => {
     if (!isCardLoaded && !isLoading) {
-      store.dispatch(getCardRequest({ token }));
+      getCardRequest({ token });
     }
   }, [token, isCardLoaded, isLoading]);
 
