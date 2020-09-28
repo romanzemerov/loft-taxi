@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { AuthContext } from 'contexts/AuthContext';
+import React from 'react';
 import { AppBar, Button, Container, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 import { Logo } from 'loft-taxi-mui-theme';
+import { logout } from 'redux/auth/actions';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
   appBar: {
@@ -28,9 +28,9 @@ const NAV_LIST = [
   { id: 'logout', label: 'Выйти', linkTo: 'login' },
 ];
 
-const Header = ({ currentPage, handleChangePage }) => {
+const Header = ({ location, history, logout }) => {
   const { appBar, appBarInner, nav, navList, navItem } = useStyles();
-  const { logout } = useContext(AuthContext);
+  const activePage = location.pathname.slice(1);
 
   const handleClick = (e) => {
     const linkTo = e.currentTarget.dataset.linkTo;
@@ -39,7 +39,7 @@ const Header = ({ currentPage, handleChangePage }) => {
       logout();
     }
 
-    handleChangePage(linkTo);
+    history.push(`/${linkTo}`);
   };
 
   return (
@@ -51,7 +51,7 @@ const Header = ({ currentPage, handleChangePage }) => {
             <nav className={nav}>
               <ul className={navList}>
                 {NAV_LIST.map(({ id, label, linkTo }) => {
-                  const isActive = currentPage === linkTo;
+                  const isActive = id === activePage;
 
                   return (
                     <li className={navItem} key={id}>
@@ -76,9 +76,8 @@ const Header = ({ currentPage, handleChangePage }) => {
   );
 };
 
-Header.propTypes = {
-  currentPage: PropTypes.string.isRequired,
-  handleChangePage: PropTypes.func.isRequired,
+const mapDispatchToProps = {
+  logout,
 };
 
-export default Header;
+export default connect(null, mapDispatchToProps)(Header);

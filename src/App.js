@@ -1,49 +1,27 @@
-import React, { useContext, useState } from 'react';
-import { MapWithHeader } from 'components/Map';
-import { ProfileWithHeader } from 'components/Profile';
-import Login from 'components/Login';
-import Signup from 'components/Signup';
-import { AuthContext } from 'contexts/AuthContext';
-
-const PROTECTED_ROUTES = ['map', 'profile'];
+import React from 'react';
+import PrivateRoute from 'components/PrivateRoute';
+import PublicRoute from 'components/PublicRoute';
+import LoginPage from 'pages/LoginPage';
+import SignupPage from 'pages/SignupPage';
+import ProfilePage from 'pages/ProfilePage';
+import MapPage from 'pages/MapPage';
+import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState(
-    window.location.pathname.slice(1),
+  return (
+    <>
+      <Router>
+        <Switch>
+          <PublicRoute path={'/'} component={LoginPage} exact />
+          <PublicRoute path={'/login'} component={LoginPage} />
+          <PublicRoute path={'/signup'} component={SignupPage} />
+          <PrivateRoute path={'/map'} component={MapPage} />
+          <PrivateRoute path={'/profile'} component={ProfilePage} />
+          <Redirect to={'/'} />
+        </Switch>
+      </Router>
+    </>
   );
-  const { isLoggedIn } = useContext(AuthContext);
-
-  const getShowingComponent = () => {
-    const PAGE_TO_COMPONENT = {
-      map: (
-        <MapWithHeader
-          currentPage={currentPage}
-          handleChangePage={handleChangePage}
-        />
-      ),
-      profile: (
-        <ProfileWithHeader
-          currentPage={currentPage}
-          handleChangePage={handleChangePage}
-        />
-      ),
-      login: <Login handleChangePage={handleChangePage} />,
-      signup: <Signup handleChangePage={handleChangePage} />,
-    };
-    const defaultComponent = PAGE_TO_COMPONENT['login'];
-
-    if (!isLoggedIn && PROTECTED_ROUTES.includes(currentPage)) {
-      return defaultComponent;
-    }
-
-    return PAGE_TO_COMPONENT[currentPage] || defaultComponent;
-  };
-
-  const handleChangePage = (newPageName) => {
-    setCurrentPage(newPageName);
-  };
-
-  return getShowingComponent();
 };
 
 export default App;

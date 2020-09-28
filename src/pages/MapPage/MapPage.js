@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { makeStyles } from '@material-ui/core/styles';
-import { withHeader } from 'HOCs/withHeader';
 
 const useStyles = makeStyles({
   map: {
@@ -12,7 +11,7 @@ const useStyles = makeStyles({
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
 
-export const Map = () => {
+const MapPage = () => {
   const classes = useStyles();
   const mapContainerRef = useRef(null);
 
@@ -28,10 +27,12 @@ export const Map = () => {
   }, []);
 
   return (
-    <div className={classes.map} data-testid={'mapSection'}>
-      <div ref={mapContainerRef}>Карта</div>
+    <div data-testid={'mapSection'}>
+      <div className={classes.map} ref={mapContainerRef}>
+        Карта
+      </div>
     </div>
   );
 };
 
-export const MapWithHeader = withHeader(Map);
+export default MapPage;
