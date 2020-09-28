@@ -16,13 +16,16 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
+const sagaMiddleware = createSagaMiddleware();
+const middlewares = [sagaMiddleware];
 const previousState = loadState();
-const middlewares = [authMiddleware, profileMiddleware];
 
 export const store = configureStore({
   reducer: rootReducer,
   middleware: middlewares,
   preloadedState: previousState,
 });
+
+sagaMiddleware.run(rootSaga);
 
 store.subscribe(throttle(() => saveState(store.getState()), 1000));
