@@ -14,3 +14,8 @@ export const setCardData = (payload) => api.post('/card', payload);
 export const getCardData = (payload) => api.get(`/card?token=${payload.token}`);
 
 export const getAddressesData = () => api.get(`/addressList`);
+
+export const getRouteData = (payload) =>
+  api.get(
+    `/route?address1=${payload.fromAddress}&address2=${payload.toAddress}`,
+  );

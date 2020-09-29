@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { connect } from 'react-redux';
-import { Paper, TextField, Button } from '@material-ui/core';
-import s from './RouteChoicer.module.sass';
-import { getAddresses, getIsLoading } from 'redux/addresses/reducers';
-import { getAddressesRequest } from 'redux/addresses/actions';
 import InfoBox from 'components/InfoBox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Paper, TextField, Button } from '@material-ui/core';
+import { getAddresses, getIsLoading } from 'redux/addresses/reducers';
+import { getRoute } from 'redux/route/reducers';
+import { getAddressesRequest } from 'redux/addresses/actions';
+import { getRouteRequest, resetRoute } from 'redux/route/actions';
+import s from './RouteChoicer.module.sass';
 
-const RouteChoicer = ({ isLoading, addresses, getAddressesRequest }) => {
+const RouteChoicer = ({
+  isLoading,
+  addresses,
+  routeCoords,
+  getAddressesRequest,
+  getRouteRequest,
+  resetRoute,
+}) => {
   const [fromAddress, setFromAddress] = useState(null);
   const [toAddress, setToAddress] = useState(null);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -28,11 +37,13 @@ const RouteChoicer = ({ isLoading, addresses, getAddressesRequest }) => {
     setToAddress(value);
   };
 
-  const handleSubmit = () => {
-    setOrderPlaced(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getRouteRequest({ fromAddress, toAddress });
   };
 
   const resetSubmit = () => {
+    resetRoute();
     setOrderPlaced(false);
     setFromAddress(null);
     setToAddress(null);
@@ -41,6 +52,12 @@ const RouteChoicer = ({ isLoading, addresses, getAddressesRequest }) => {
   useEffect(() => {
     getAddressesRequest();
   }, [getAddressesRequest]);
+
+  useEffect(() => {
+    if (routeCoords) {
+      setOrderPlaced(true);
+    }
+  }, [routeCoords, setOrderPlaced]);
 
   return (
     <>
@@ -91,10 +108,14 @@ const RouteChoicer = ({ isLoading, addresses, getAddressesRequest }) => {
 const mapStateToProps = (state) => ({
   isLoading: getIsLoading(state),
   addresses: getAddresses(state),
+  routeCoords: getRoute(state),
 });
 
 const mapDispatchToProps = {
   getAddressesRequest,
+  getRouteRequest,
+  getRoute,
+  resetRoute,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RouteChoicer);
