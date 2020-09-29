@@ -75,4 +75,9 @@ export const getCard = createSelector(
   (card) => card,
 );
 
+export const getIsCardExist = createSelector(
+  (state) => state.profile.card,
+  (card) => card !== defaultCardState,
+);
+
 export default profile;
