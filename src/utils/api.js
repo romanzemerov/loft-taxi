@@ -5,12 +5,12 @@ const api = axios.create({
   responseType: 'json',
 });
 
-export const postLogin = (payload) => api.post('/auth', payload);
+export const executeAuthorization = (payload) => api.post('/auth', payload);
 
-export const postRegister = (payload) => api.post('/register', payload);
+export const register = (payload) => api.post('/register', payload);
 
-export const postCard = (payload) => api.post('/card', payload);
+export const setCardData = (payload) => api.post('/card', payload);
 
-export const getCard = (payload) => api.get(`/card?token=${payload.token}`);
+export const getCardData = (payload) => api.get(`/card?token=${payload.token}`);
 
 export const getAddressesData = () => api.get(`/addressList`);

@@ -8,12 +8,12 @@ import {
   registerRequest,
   registerSuccess,
 } from 'redux/auth/actions';
-import { postLogin, postRegister } from 'utils/Api';
+import { executeAuthorization, register } from 'utils/api';
 import { deleteState } from 'utils/localStorage';
 
 function* loginSaga(action) {
   try {
-    const response = yield call(postLogin, action.payload);
+    const response = yield call(executeAuthorization, action.payload);
     const { data } = response;
     const { success, token, error } = data;
 
@@ -31,7 +31,7 @@ function* loginSaga(action) {
 
 function* registerSaga(action) {
   try {
-    const response = yield call(postRegister, action.payload);
+    const response = yield call(register, action.payload);
     const { data } = response;
     const { success, token, error } = data;
 

@@ -7,7 +7,7 @@ import {
   postCardRequest,
   postCardSuccess,
 } from 'redux/profile/actions';
-import { postCard, getCard } from 'utils/Api';
+import { setCardData, getCardData } from 'utils/api';
 
 const transformCardProperties = ({
   cardNumber,
@@ -21,9 +21,9 @@ const transformCardProperties = ({
   secretCode: cvc,
 });
 
-function* postCardSaga(action) {
+function* setCardDataSaga(action) {
   try {
-    const response = yield call(postCard, action.payload);
+    const response = yield call(setCardData, action.payload);
     const { data } = response;
     const { success, error } = data;
 
@@ -37,9 +37,9 @@ function* postCardSaga(action) {
   }
 }
 
-function* getCardSaga(action) {
+function* getCardDataSaga(action) {
   try {
-    const response = yield call(getCard, action.payload);
+    const response = yield call(getCardData, action.payload);
     const { data } = response;
     const { error } = data;
 
@@ -54,8 +54,8 @@ function* getCardSaga(action) {
 }
 
 function* profileWatch() {
-  yield takeEvery(postCardRequest, postCardSaga);
-  yield takeEvery(getCardRequest, getCardSaga);
+  yield takeEvery(postCardRequest, setCardDataSaga);
+  yield takeEvery(getCardRequest, getCardDataSaga);
 }
 
 export default function* () {
