@@ -1,18 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-  map: {
-    minHeight: 'calc(100vh - 68px)',
-  },
-});
+import { connect } from 'react-redux';
+import RouteChoicer from './components/RouteChoicer';
+import s from './MapPage.module.sass';
+import InfoBox from 'components/InfoBox';
+import { getIsCardExist } from 'redux/profile/reducers';
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
 
-const MapPage = () => {
-  const classes = useStyles();
+const MapPage = ({ isCardExist }) => {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
@@ -27,12 +24,19 @@ const MapPage = () => {
   }, []);
 
   return (
-    <div data-testid={'mapSection'}>
-      <div className={classes.map} ref={mapContainerRef}>
+    <div className={s.page} data-testid={'mapSection'}>
+      <div className={s.panel}>
+        {isCardExist ? <RouteChoicer /> : <InfoBox type={'noCard'} />}
+      </div>
+      <div className={s.map} ref={mapContainerRef}>
         Карта
       </div>
     </div>
   );
 };
 
-export default MapPage;
+const mapStateToProps = (state) => ({
+  isCardExist: getIsCardExist(state),
+});
+
+export default connect(mapStateToProps, null)(MapPage);
