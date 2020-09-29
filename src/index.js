@@ -5,18 +5,20 @@ import LuxonUtils from '@date-io/luxon';
 import { Provider } from 'react-redux';
 import { store } from 'redux/store';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { theme } from 'loft-taxi-mui-theme';
 import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <MuiPickersUtilsProvider utils={LuxonUtils}>
-          <App />
-        </MuiPickersUtilsProvider>
-      </ThemeProvider>
+      <StylesProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <MuiPickersUtilsProvider utils={LuxonUtils}>
+            <App />
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
+      </StylesProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
