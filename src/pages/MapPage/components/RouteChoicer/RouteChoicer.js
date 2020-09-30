@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import InfoBox from 'components/InfoBox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Paper, TextField, Button } from '@material-ui/core';
-import { getAddresses, getIsLoading } from 'redux/addresses/reducers';
+import {
+  getAddresses,
+  getIsLoading,
+  getIsAddressesLoaded,
+} from 'redux/addresses/reducers';
 import { getRoute } from 'redux/route/reducers';
 import { getAddressesRequest } from 'redux/addresses/actions';
 import { getRouteRequest, resetRoute } from 'redux/route/actions';
@@ -12,6 +16,7 @@ import s from './RouteChoicer.module.sass';
 const RouteChoicer = ({
   isLoading,
   addresses,
+  isAddressesLoaded,
   routeCoords,
   getAddressesRequest,
   getRouteRequest,
@@ -50,8 +55,10 @@ const RouteChoicer = ({
   };
 
   useEffect(() => {
-    getAddressesRequest();
-  }, [getAddressesRequest]);
+    if (!isAddressesLoaded) {
+      getAddressesRequest();
+    }
+  }, [isAddressesLoaded, getAddressesRequest]);
 
   useEffect(() => {
     if (routeCoords) {
@@ -108,6 +115,7 @@ const RouteChoicer = ({
 const mapStateToProps = (state) => ({
   isLoading: getIsLoading(state),
   addresses: getAddresses(state),
+  isAddressesLoaded: getIsAddressesLoaded(state),
   routeCoords: getRoute(state),
 });
 

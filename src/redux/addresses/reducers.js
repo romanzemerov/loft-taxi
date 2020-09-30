@@ -39,4 +39,9 @@ export const getAddresses = createSelector(
   (list) => list,
 );
 
+export const getIsAddressesLoaded = createSelector(
+  (state) => state.addresses.list,
+  (list) => !!list.length,
+);
+
 export default addresses;
