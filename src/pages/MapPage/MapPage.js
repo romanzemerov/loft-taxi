@@ -13,6 +13,7 @@ import {
 import { getRoute } from 'redux/route/reducers';
 import { drawRoute } from 'pages/MapPage/helpers/drawRoute';
 import s from './MapPage.module.sass';
+import PropTypes from 'prop-types';
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
@@ -84,6 +85,18 @@ class MapPage extends PureComponent {
     );
   }
 }
+
+MapPage.propTypes = {
+  token: PropTypes.string.isRequired,
+  isCardLoading: PropTypes.bool.isRequired,
+  isCardLoaded: PropTypes.bool.isRequired,
+  isCardExist: PropTypes.bool.isRequired,
+  routeCoords: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.array).isRequired,
+    PropTypes.instanceOf(null),
+  ]),
+  getCardRequest: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   token: getUserToken(state),

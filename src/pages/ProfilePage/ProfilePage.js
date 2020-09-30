@@ -19,6 +19,7 @@ import {
   SubtitleTypography,
 } from './StyledProfilePage';
 import { MCIcon } from 'loft-taxi-mui-theme';
+import PropTypes from 'prop-types';
 
 const ProfilePage = memo(function ProfilePage({
   token,
@@ -143,6 +144,20 @@ const ProfilePage = memo(function ProfilePage({
     </StyledProfilePage>
   );
 });
+
+ProfilePage.propTypes = {
+  token: PropTypes.string.isRequired,
+  creditCard: PropTypes.exact({
+    number: PropTypes.string.isRequired,
+    expireDate: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    secretCode: PropTypes.string.isRequired,
+  }),
+  isCardLoading: PropTypes.bool.isRequired,
+  isCardLoaded: PropTypes.bool.isRequired,
+  postCardRequest: PropTypes.func.isRequired,
+  getCardRequest: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   token: getUserToken(state),

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Paper, Typography } from '@material-ui/core';
 import s from 'components/InfoBox/InfoBox.module.sass';
+import PropTypes from 'prop-types';
 
 const typeToContent = {
   noCard: {
@@ -20,7 +21,7 @@ const typeToContent = {
   },
 };
 
-const InfoBox = ({ type, onClickButton }) => {
+const InfoBox = ({ type, onClickButton = null }) => {
   const { headerText, description, buttonLabel, linkTo } = typeToContent[type];
 
   return (
@@ -36,12 +37,17 @@ const InfoBox = ({ type, onClickButton }) => {
         variant="contained"
         color="primary"
         to={linkTo}
-        onClick={onClickButton ? onClickButton : null}
+        onClick={onClickButton}
       >
         {buttonLabel}
       </Button>
     </Paper>
   );
+};
+
+InfoBox.propTypes = {
+  type: PropTypes.string.isRequired,
+  onClickButton: PropTypes.func,
 };
 
 export default InfoBox;

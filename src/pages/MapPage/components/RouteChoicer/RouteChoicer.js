@@ -12,6 +12,7 @@ import { getRoute } from 'redux/route/reducers';
 import { getAddressesRequest } from 'redux/addresses/actions';
 import { getRouteRequest, resetRoute } from 'redux/route/actions';
 import s from './RouteChoicer.module.sass';
+import PropTypes from 'prop-types';
 
 const RouteChoicer = ({
   isLoading,
@@ -110,6 +111,20 @@ const RouteChoicer = ({
       )}
     </>
   );
+};
+
+RouteChoicer.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  addresses: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isAddressesLoaded: PropTypes.bool.isRequired,
+  routeCoords: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.array).isRequired,
+    PropTypes.instanceOf(null),
+  ]),
+  getAddressesRequest: PropTypes.func.isRequired,
+  getRouteRequest: PropTypes.func.isRequired,
+  getRoute: PropTypes.func.isRequired,
+  resetRoute: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

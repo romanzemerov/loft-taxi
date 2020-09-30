@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Logo } from 'loft-taxi-mui-theme';
 import { logout } from 'redux/auth/actions';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
   appBar: {
@@ -74,6 +75,12 @@ const Header = ({ location, history, logout }) => {
       </Container>
     </AppBar>
   );
+};
+
+Header.propTypes = {
+  location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {

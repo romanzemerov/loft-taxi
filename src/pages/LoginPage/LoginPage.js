@@ -13,6 +13,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { Logo } from 'loft-taxi-mui-theme';
 import backgroundImage from 'assets/background.jpg';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
   form: {
@@ -136,6 +137,11 @@ const LoginPage = ({ isLoading, loginRequest }) => {
       </div>
     </div>
   );
+};
+
+LoginPage.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  loginRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
