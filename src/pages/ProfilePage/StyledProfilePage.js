@@ -9,11 +9,21 @@ import {
 import backgroundImage from 'assets/background.jpg';
 
 export const StyledProfilePage = styled.div`
+  z-index: -1;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-image: url('${backgroundImage}');
+  min-height: calc(100vh - 64px);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('${backgroundImage}');
+  }
 `;
 
 export const StyledFormWrapper = styled(Paper)`
