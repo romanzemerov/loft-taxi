@@ -60,7 +60,7 @@ const profile = createReducer(initialState, {
   },
 });
 
-export const getIsLoading = createSelector(
+export const getIsCardLoading = createSelector(
   (state) => state.profile.isLoading,
   (isLoading) => isLoading,
 );

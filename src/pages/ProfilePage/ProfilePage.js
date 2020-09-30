@@ -1,7 +1,11 @@
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getUserToken } from 'redux/auth/reducers';
-import { getCard, getIsCardLoaded, getIsLoading } from 'redux/profile/reducers';
+import {
+  getCard,
+  getIsCardLoaded,
+  getIsCardLoading,
+} from 'redux/profile/reducers';
 import { getCardRequest, postCardRequest } from 'redux/profile/actions';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
@@ -19,7 +23,7 @@ import { MCIcon } from 'loft-taxi-mui-theme';
 const ProfilePage = memo(function ProfilePage({
   token,
   creditCard,
-  isLoading,
+  isCardLoading,
   isCardLoaded,
   postCardRequest,
   getCardRequest,
@@ -56,10 +60,10 @@ const ProfilePage = memo(function ProfilePage({
   };
 
   useEffect(() => {
-    if (!isCardLoaded && !isLoading) {
+    if (!isCardLoaded && !isCardLoading) {
       getCardRequest({ token });
     }
-  }, [token, isCardLoaded, isLoading, getCardRequest]);
+  }, [token, isCardLoaded, isCardLoading, getCardRequest]);
 
   useEffect(() => {
     setCard(creditCard);
@@ -130,7 +134,7 @@ const ProfilePage = memo(function ProfilePage({
             size="medium"
             variant="contained"
             color="primary"
-            disabled={isLoading}
+            disabled={isCardLoading}
           >
             Сохранить
           </SubmitButton>
@@ -143,7 +147,7 @@ const ProfilePage = memo(function ProfilePage({
 const mapStateToProps = (state) => ({
   token: getUserToken(state),
   creditCard: getCard(state),
-  isLoading: getIsLoading(state),
+  isCardLoading: getIsCardLoading(state),
   isCardLoaded: getIsCardLoaded(state),
 });
 

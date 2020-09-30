@@ -3,7 +3,13 @@ import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import RouteChoicer from './components/RouteChoicer';
 import InfoBox from 'components/InfoBox';
-import { getIsCardExist } from 'redux/profile/reducers';
+import { getCardRequest } from 'redux/profile/actions';
+import { getUserToken } from 'redux/auth/reducers';
+import {
+  getIsCardExist,
+  getIsCardLoaded,
+  getIsCardLoading,
+} from 'redux/profile/reducers';
 import { getRoute } from 'redux/route/reducers';
 import { drawRoute } from 'pages/MapPage/helpers/drawRoute';
 import s from './MapPage.module.sass';
@@ -16,7 +22,11 @@ class MapPage extends PureComponent {
   mapContainer = React.createRef();
 
   componentDidMount() {
-    const { routeCoords } = this.props;
+    const { token, routeCoords, getCardRequest, isCardLoaded } = this.props;
+
+    if (!isCardLoaded) {
+      getCardRequest({ token });
+    }
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer.current,
@@ -50,13 +60,23 @@ class MapPage extends PureComponent {
   }
 
   render() {
-    let { isCardExist } = this.props;
+    const { isCardExist, isCardLoading } = this.props;
 
-    return (
-      <div className={s.page} data-testid={'mapSection'}>
+    const getInfoPanel = () => {
+      if (isCardLoading) {
+        return null;
+      }
+
+      return (
         <div className={s.panel}>
           {isCardExist ? <RouteChoicer /> : <InfoBox type={'noCard'} />}
         </div>
+      );
+    };
+
+    return (
+      <div className={s.page} data-testid={'mapSection'}>
+        {getInfoPanel()}
         <div className={s.map} ref={this.mapContainer}>
           Карта
         </div>
@@ -66,8 +86,15 @@ class MapPage extends PureComponent {
 }
 
 const mapStateToProps = (state) => ({
+  token: getUserToken(state),
+  isCardLoading: getIsCardLoading(state),
+  isCardLoaded: getIsCardLoaded(state),
   isCardExist: getIsCardExist(state),
   routeCoords: getRoute(state),
 });
 
-export default connect(mapStateToProps, null)(MapPage);
+const mapDispatchToProps = {
+  getCardRequest,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapPage);
