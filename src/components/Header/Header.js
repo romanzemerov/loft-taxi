@@ -44,7 +44,7 @@ const Header = ({ location, history, logout }) => {
   };
 
   return (
-    <AppBar className={appBar} position={'static'}>
+    <AppBar className={appBar}>
       <Container>
         <Toolbar>
           <div className={appBarInner}>
