@@ -78,9 +78,7 @@ class MapPage extends PureComponent {
     return (
       <div className={s.page} data-testid={'mapSection'}>
         {getInfoPanel()}
-        <div className={s.map} ref={this.mapContainer}>
-          Карта
-        </div>
+        <div className={s.map} ref={this.mapContainer} />
       </div>
     );
   }
