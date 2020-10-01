@@ -103,6 +103,7 @@ const RouteChoicer = ({
               variant="contained"
               color="primary"
               disabled={isLoading}
+              fullWidth
             >
               Вызвать такси
             </Button>

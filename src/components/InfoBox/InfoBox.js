@@ -36,6 +36,7 @@ const InfoBox = ({ type, onClickButton = null }) => {
         type="button"
         variant="contained"
         color="primary"
+        fullWidth
         to={linkTo}
         onClick={onClickButton}
       >
