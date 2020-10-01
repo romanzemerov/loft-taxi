@@ -13,8 +13,8 @@ export const StyledPage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 68px;
-  min-height: calc(100vh - 68px);
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
   background-image: url('${backgroundImage}');
 `;
 

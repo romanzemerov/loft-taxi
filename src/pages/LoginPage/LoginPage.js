@@ -37,7 +37,7 @@ const LoginPage = ({ isLoading, loginRequest }) => {
 
   return (
     <StyledLoginPage>
-      <Logo />
+      <Logo animated white />
       <StyledFormWrapper>
         <StyledForm>
           <StyledHeader variant="h4">Логин</StyledHeader>

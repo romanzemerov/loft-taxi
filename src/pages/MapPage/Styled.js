@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 export const StyledPage = styled.div`
   position: relative;
-  margin-top: 68px;
+  margin-top: 64px;
 `;
 
 export const StyledMap = styled.div`
-  min-height: calc(100vh - 68px);
+  min-height: calc(100vh - 64px);
 `;
 
 export const StyledPanel = styled.div`

@@ -3,6 +3,7 @@ import { AppBar } from '@material-ui/core';
 
 export const StyledAppBar = styled(AppBar)`
   background-color: #fff;
+  min-height: 64px;
 `;
 
 export const StyledAppBarInner = styled.div`
