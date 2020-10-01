@@ -15,9 +15,6 @@ import { drawRoute } from 'pages/MapPage/helpers/drawRoute';
 import PropTypes from 'prop-types';
 import { StyledPage, StyledMap, StyledPanel } from './Styled';
 
-mapboxgl.accessToken =
-  'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
-
 class MapPage extends PureComponent {
   map = null;
   mapContainer = React.createRef();
@@ -30,6 +27,7 @@ class MapPage extends PureComponent {
     }
 
     this.map = new mapboxgl.Map({
+      accessToken: process.env['REACT_APP_MAPBOX_TOKEN'],
       container: this.mapContainer.current,
       style: 'mapbox://styles/romanzemerov/ckf4es8aq1l3j19n5iz5mhxkm',
       center: [30.2656504, 59.8029126],
