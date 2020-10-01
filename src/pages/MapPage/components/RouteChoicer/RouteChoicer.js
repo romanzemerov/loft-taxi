@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import InfoBox from 'components/InfoBox';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Paper, TextField, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import {
   getAddresses,
   getIsLoading,
@@ -11,8 +10,8 @@ import {
 import { getRoute } from 'redux/route/reducers';
 import { getAddressesRequest } from 'redux/addresses/actions';
 import { getRouteRequest, resetRoute } from 'redux/route/actions';
-import s from './RouteChoicer.module.sass';
 import PropTypes from 'prop-types';
+import { StyledWrapper, StyledAutocomplete, StyledButton } from './Styled';
 
 const RouteChoicer = ({
   isLoading,
@@ -72,12 +71,11 @@ const RouteChoicer = ({
       {orderPlaced ? (
         <InfoBox type={'orderPlaced'} onClickButton={resetSubmit} />
       ) : (
-        <Paper elevation={3} className={s.wrapper}>
+        <StyledWrapper elevation={3}>
           <form onSubmit={handleSubmit}>
-            <Autocomplete
+            <StyledAutocomplete
               id={'fromAddress'}
               name={'fromAddress'}
-              className={s.input}
               options={addresses}
               renderInput={(params) => <TextField {...params} label="Откуда" />}
               filterOptions={filterAutocompleteOptions}
@@ -85,10 +83,9 @@ const RouteChoicer = ({
               onChange={handleFromAddressChange}
               disabled={isLoading}
             />
-            <Autocomplete
+            <StyledAutocomplete
               id={'toAddress'}
               name={'toAddress'}
-              className={s.input}
               options={addresses}
               getOptionLabel={(option) => option}
               renderInput={(params) => <TextField {...params} label="Куда" />}
@@ -97,8 +94,7 @@ const RouteChoicer = ({
               onChange={handleToAddressChange}
               disabled={isLoading}
             />
-            <Button
-              className={s.button}
+            <StyledButton
               type="submit"
               variant="contained"
               color="primary"
@@ -106,9 +102,9 @@ const RouteChoicer = ({
               fullWidth
             >
               Вызвать такси
-            </Button>
+            </StyledButton>
           </form>
-        </Paper>
+        </StyledWrapper>
       )}
     </>
   );

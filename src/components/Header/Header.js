@@ -1,27 +1,15 @@
 import React from 'react';
-import { AppBar, Button, Container, Toolbar } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Container, Toolbar } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import { logout } from 'redux/auth/actions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-const useStyles = makeStyles({
-  appBar: {
-    backgroundColor: '#fff',
-  },
-  appBarInner: {
-    display: 'flex',
-    width: '100%',
-  },
-  nav: { marginLeft: 'auto' },
-  navList: { display: 'flex' },
-  navItem: {
-    listStyle: 'none',
-    padding: '0',
-    margin: '0',
-  },
-});
+import {
+  StyledAppBar,
+  StyledAppBarInner,
+  StyledNav,
+  StyledNavList,
+} from './Styled';
 
 const NAV_LIST = [
   { id: 'map', label: 'Карта', linkTo: 'map' },
@@ -30,7 +18,6 @@ const NAV_LIST = [
 ];
 
 const Header = ({ location, history, logout }) => {
-  const { appBar, appBarInner, nav, navList, navItem } = useStyles();
   const activePage = location.pathname.slice(1);
 
   const handleClick = (e) => {
@@ -44,18 +31,18 @@ const Header = ({ location, history, logout }) => {
   };
 
   return (
-    <AppBar className={appBar}>
+    <StyledAppBar>
       <Container>
         <Toolbar>
-          <div className={appBarInner}>
+          <StyledAppBarInner>
             <Logo />
-            <nav className={nav}>
-              <ul className={navList}>
+            <StyledNav>
+              <StyledNavList>
                 {NAV_LIST.map(({ id, label, linkTo }) => {
                   const isActive = id === activePage;
 
                   return (
-                    <li className={navItem} key={id}>
+                    <li key={id}>
                       <Button
                         style={{ pointerEvents: isActive ? 'none' : 'auto' }}
                         data-link-to={linkTo}
@@ -68,12 +55,12 @@ const Header = ({ location, history, logout }) => {
                     </li>
                   );
                 })}
-              </ul>
-            </nav>
-          </div>
+              </StyledNavList>
+            </StyledNav>
+          </StyledAppBarInner>
         </Toolbar>
       </Container>
-    </AppBar>
+    </StyledAppBar>
   );
 };
 

@@ -10,14 +10,14 @@ import { getCardRequest, postCardRequest } from 'redux/profile/actions';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import {
+  StyledPage,
   StyledCard,
   StyledCardContent,
   StyledFormWrapper,
   StyledIconWrapper,
-  StyledProfilePage,
   SubmitButton,
   SubtitleTypography,
-} from './StyledProfilePage';
+} from './Styled';
 import { MCIcon } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
 
@@ -70,7 +70,7 @@ const ProfilePage = memo(function ProfilePage({
     setCard(creditCard);
   }, [creditCard]);
   return (
-    <StyledProfilePage>
+    <StyledPage>
       <StyledFormWrapper elevation={3}>
         <Typography variant="h4" align="center" gutterBottom>
           Профиль
@@ -141,7 +141,7 @@ const ProfilePage = memo(function ProfilePage({
           </SubmitButton>
         </form>
       </StyledFormWrapper>
-    </StyledProfilePage>
+    </StyledPage>
   );
 });
 

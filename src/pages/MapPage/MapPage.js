@@ -12,8 +12,8 @@ import {
 } from 'redux/profile/reducers';
 import { getRoute } from 'redux/route/reducers';
 import { drawRoute } from 'pages/MapPage/helpers/drawRoute';
-import s from './MapPage.module.sass';
 import PropTypes from 'prop-types';
+import { StyledPage, StyledMap, StyledPanel } from './Styled';
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
@@ -69,17 +69,17 @@ class MapPage extends PureComponent {
       }
 
       return (
-        <div className={s.panel}>
+        <StyledPanel>
           {isCardExist ? <RouteChoicer /> : <InfoBox type={'noCard'} />}
-        </div>
+        </StyledPanel>
       );
     };
 
     return (
-      <div className={s.page} data-testid={'mapSection'}>
+      <StyledPage data-testid={'mapSection'}>
         {getInfoPanel()}
-        <div className={s.map} ref={this.mapContainer} />
-      </div>
+        <StyledMap ref={this.mapContainer} />
+      </StyledPage>
     );
   }
 }

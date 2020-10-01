@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Paper, Typography } from '@material-ui/core';
-import s from 'components/InfoBox/InfoBox.module.sass';
+import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { StyledWrapper, StyledButton } from './Styled';
 
 const typeToContent = {
   noCard: {
@@ -25,13 +25,12 @@ const InfoBox = ({ type, onClickButton = null }) => {
   const { headerText, description, buttonLabel, linkTo } = typeToContent[type];
 
   return (
-    <Paper elevation={3} className={s.wrapper}>
+    <StyledWrapper elevation={3}>
       <Typography variant="h4" gutterBottom>
         {headerText}
       </Typography>
       <Typography variant="body1">{description}</Typography>
-      <Button
-        className={s.button}
+      <StyledButton
         component={Link}
         type="button"
         variant="contained"
@@ -41,8 +40,8 @@ const InfoBox = ({ type, onClickButton = null }) => {
         onClick={onClickButton}
       >
         {buttonLabel}
-      </Button>
-    </Paper>
+      </StyledButton>
+    </StyledWrapper>
   );
 };
 

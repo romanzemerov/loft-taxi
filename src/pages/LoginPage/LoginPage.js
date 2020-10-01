@@ -3,67 +3,24 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getIsLoading } from 'redux/auth/reducers';
 import { loginRequest } from 'redux/auth/actions';
-import {
-  Button,
-  Link as MaterialLink,
-  Paper,
-  TextField,
-  Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Link as MaterialLink, TextField } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
-import backgroundImage from 'assets/background.jpg';
 import PropTypes from 'prop-types';
-
-const useStyles = makeStyles({
-  form: {
-    maxWidth: '500px',
-    padding: '44px 60px',
-  },
-  header: {
-    marginBottom: '30px',
-  },
-  subHeader: {
-    marginBottom: '40px',
-  },
-  input: {
-    marginBottom: '32px',
-    '&:last-of-type': {
-      marginBottom: '0',
-    },
-  },
-  button: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginTop: '40px',
-  },
-  loginPage: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundImage: `url(${backgroundImage})`,
-  },
-  formWrapper: {
-    marginLeft: '214px',
-  },
-});
+import {
+  StyledLoginPage,
+  StyledFormWrapper,
+  StyledForm,
+  StyledHeader,
+  StyledSubHeader,
+  StyledInput,
+  StyledButton,
+} from './Styled';
 
 const LoginPage = ({ isLoading, loginRequest }) => {
   const [{ email, password }, setUser] = useState({
     email: 'testtestovich5@test.test',
     password: 'testtest',
   });
-
-  const {
-    loginPage,
-    formWrapper,
-    form,
-    header,
-    subHeader,
-    input,
-    button,
-  } = useStyles();
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
@@ -79,51 +36,45 @@ const LoginPage = ({ isLoading, loginRequest }) => {
   };
 
   return (
-    <div className={loginPage}>
-      <Logo animated={true} white={true} />
-      <div className={formWrapper}>
-        <Paper className={form}>
-          <Typography className={header} variant="h4">
-            Логин
-          </Typography>
-          <Typography className={subHeader} variant={'body1'}>
+    <StyledLoginPage>
+      <Logo />
+      <StyledFormWrapper>
+        <StyledForm>
+          <StyledHeader variant="h4">Логин</StyledHeader>
+          <StyledSubHeader variant={'body1'}>
             Новый пользователь?
             <MaterialLink to="/signup" component={Link} data-testid={'link'}>
               &nbsp;Зарегистрируйтесь
             </MaterialLink>
-          </Typography>
+          </StyledSubHeader>
           <form onSubmit={handleSubmit}>
-            <TextField
-              className={input}
+            <StyledInput
               type="email"
               name="email"
               id="email"
               label="Имя пользователя"
-              fullWidth={true}
+              fullWidth
               value={email}
               onChange={handleInputChange}
-              required={true}
+              required
               inputProps={{
                 'data-testid': 'input-email',
               }}
             />
-
             <TextField
-              className={input}
               type="password"
               name="password"
               id="password"
               label="Пароль"
-              fullWidth={true}
+              fullWidth
               value={password}
               onChange={handleInputChange}
-              required={true}
+              required
               inputProps={{
                 'data-testid': 'input-password',
               }}
             />
-            <Button
-              className={button}
+            <StyledButton
               type={'submit'}
               variant={'contained'}
               color={'primary'}
@@ -131,11 +82,11 @@ const LoginPage = ({ isLoading, loginRequest }) => {
               disabled={isLoading}
             >
               Войти
-            </Button>
+            </StyledButton>
           </form>
-        </Paper>
-      </div>
-    </div>
+        </StyledForm>
+      </StyledFormWrapper>
+    </StyledLoginPage>
   );
 };
 

@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import backgroundImage from 'assets/background.jpg';
 
-export const StyledProfilePage = styled.div`
+export const StyledPage = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
