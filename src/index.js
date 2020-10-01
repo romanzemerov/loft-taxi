@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from 'components/App';
 import LuxonUtils from '@date-io/luxon';
 import { Provider } from 'react-redux';
 import { store } from 'redux/store';
