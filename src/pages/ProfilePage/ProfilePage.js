@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getUserToken } from 'redux/auth/reducers';
 import {
   getCard,
+  getCardLoadingError,
   getIsCardLoaded,
   getIsCardLoading,
 } from 'redux/profile/reducers';
@@ -26,6 +27,7 @@ const ProfilePage = memo(function ProfilePage({
   creditCard,
   isCardLoading,
   isCardLoaded,
+  loadingError,
   postCardRequest,
   getCardRequest,
 }) {
@@ -61,14 +63,15 @@ const ProfilePage = memo(function ProfilePage({
   };
 
   useEffect(() => {
-    if (!isCardLoaded && !isCardLoading) {
+    if (!loadingError && !isCardLoaded && !isCardLoading) {
       getCardRequest({ token });
     }
-  }, [token, isCardLoaded, isCardLoading, getCardRequest]);
+  }, [token, isCardLoaded, isCardLoading, loadingError, getCardRequest]);
 
   useEffect(() => {
     setCard(creditCard);
   }, [creditCard]);
+
   return (
     <StyledPage>
       <StyledFormWrapper elevation={3}>
@@ -149,12 +152,19 @@ ProfilePage.propTypes = {
   token: PropTypes.string.isRequired,
   creditCard: PropTypes.exact({
     number: PropTypes.string.isRequired,
-    expireDate: PropTypes.string.isRequired,
+    expireDate: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.instanceOf(null),
+    ]),
     name: PropTypes.string.isRequired,
     secretCode: PropTypes.string.isRequired,
   }),
   isCardLoading: PropTypes.bool.isRequired,
   isCardLoaded: PropTypes.bool.isRequired,
+  loadingError: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.instanceOf(null),
+  ]),
   postCardRequest: PropTypes.func.isRequired,
   getCardRequest: PropTypes.func.isRequired,
 };
@@ -164,6 +174,7 @@ const mapStateToProps = (state) => ({
   creditCard: getCard(state),
   isCardLoading: getIsCardLoading(state),
   isCardLoaded: getIsCardLoaded(state),
+  loadingError: getCardLoadingError(state),
 });
 
 const mapDispatchToProps = {

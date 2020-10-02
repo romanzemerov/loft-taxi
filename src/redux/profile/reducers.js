@@ -78,4 +78,9 @@ export const getIsCardExist = createSelector(
   (card) => card !== defaultCardState,
 );
 
+export const getCardLoadingError = createSelector(
+  (state) => state.profile.error,
+  (error) => error,
+);
+
 export default profile;
