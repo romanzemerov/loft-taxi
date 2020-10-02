@@ -11,7 +11,7 @@ import {
 import { executeAuthorization, register } from 'utils/api';
 import { deleteState } from 'utils/localStorage';
 
-function* loginSaga(action) {
+export function* loginSaga(action) {
   try {
     const response = yield call(executeAuthorization, action.payload);
     const { data } = response;
@@ -24,12 +24,12 @@ function* loginSaga(action) {
     } else {
       yield put(loginFailure(error));
     }
-  } catch (error) {
-    yield put(loginFailure(error));
+  } catch ({ message }) {
+    yield put(loginFailure(message));
   }
 }
 
-function* registerSaga(action) {
+export function* registerSaga(action) {
   try {
     const response = yield call(register, action.payload);
     const { data } = response;
@@ -42,8 +42,8 @@ function* registerSaga(action) {
     } else {
       yield put(registerFailure(error));
     }
-  } catch (error) {
-    yield put(registerFailure(error));
+  } catch ({ message }) {
+    yield put(registerFailure(message));
   }
 }
 

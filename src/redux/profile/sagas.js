@@ -21,7 +21,7 @@ const transformCardProperties = ({
   secretCode: cvc,
 });
 
-function* setCardDataSaga(action) {
+export function* setCardDataSaga(action) {
   try {
     const response = yield call(setCardData, action.payload);
     const { data } = response;
@@ -32,12 +32,12 @@ function* setCardDataSaga(action) {
     } else {
       yield put(postCardFailure(error));
     }
-  } catch (error) {
-    yield put(postCardFailure(error));
+  } catch ({ message }) {
+    yield put(postCardFailure(message));
   }
 }
 
-function* getCardDataSaga(action) {
+export function* getCardDataSaga(action) {
   try {
     const response = yield call(getCardData, action.payload);
     const { data } = response;
@@ -48,8 +48,8 @@ function* getCardDataSaga(action) {
     } else {
       yield put(getCardFailure(error));
     }
-  } catch (error) {
-    yield put(getCardFailure(error));
+  } catch ({ message }) {
+    yield put(getCardFailure(message));
   }
 }
 
