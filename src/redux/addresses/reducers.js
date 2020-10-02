@@ -20,7 +20,6 @@ const addresses = createReducer(initialState, {
   [getAddressesSuccess]: (state, { payload }) => {
     state.isLoading = false;
     state.list = payload;
-    state.error = null;
   },
   [getAddressesFailure]: (state, { payload }) => {
     state.isLoading = false;

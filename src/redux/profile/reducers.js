@@ -32,7 +32,6 @@ const profile = createReducer(initialState, {
     state.isLoading = false;
     state.isCardLoaded = true;
     state.card = payload;
-    state.error = null;
   },
   [postCardFailure]: (state, { payload }) => {
     state.isLoading = false;
@@ -50,7 +49,6 @@ const profile = createReducer(initialState, {
     state.isLoading = false;
     state.isCardLoaded = true;
     state.card = payload;
-    state.error = null;
   },
   [getCardFailure]: (state, { payload }) => {
     state.isLoading = false;

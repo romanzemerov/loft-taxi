@@ -21,7 +21,6 @@ const route = createReducer(initialState, {
   [getRouteSuccess]: (state, { payload }) => {
     state.isLoading = false;
     state.coords = payload;
-    state.error = null;
   },
   [getRouteFailure]: (state, { payload }) => {
     state.isLoading = false;
