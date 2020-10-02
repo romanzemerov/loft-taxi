@@ -8,15 +8,22 @@ import {
   getCardFailure,
 } from './actions';
 
+const defaultCardState = {
+  number: '',
+  expireDate: null,
+  name: '',
+  secretCode: '',
+};
+
 describe('Profile reducer', () => {
   describe('Set card', () => {
     it('should return the download state', () => {
       const state = profileReducer(undefined, postCardRequest());
 
       expect(state).toEqual({
-        isLoading: false,
-        isLoggedIn: false,
-        user: null,
+        isLoading: true,
+        card: defaultCardState,
+        isCardLoaded: false,
         error: null,
       });
     });
@@ -34,8 +41,13 @@ describe('Profile reducer', () => {
 
       expect(state).toEqual({
         isLoading: false,
-        isLoggedIn: false,
-        user: null,
+        card: {
+          number: '123',
+          expireDate: 1767225600,
+          name: 'test name',
+          secretCode: 'test secret code',
+        },
+        isCardLoaded: true,
         error: null,
       });
     });
@@ -48,9 +60,9 @@ describe('Profile reducer', () => {
 
       expect(state).toEqual({
         isLoading: false,
-        isLoggedIn: false,
-        user: null,
-        error: null,
+        card: defaultCardState,
+        isCardLoaded: false,
+        error: 'test error message',
       });
     });
   });
