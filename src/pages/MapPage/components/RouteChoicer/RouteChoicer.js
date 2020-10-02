@@ -77,7 +77,9 @@ const RouteChoicer = ({
               id={'fromAddress'}
               name={'fromAddress'}
               options={addresses}
-              renderInput={(params) => <TextField {...params} label="Откуда" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Откуда" required />
+              )}
               filterOptions={filterAutocompleteOptions}
               value={fromAddress}
               onChange={handleFromAddressChange}
@@ -88,7 +90,9 @@ const RouteChoicer = ({
               name={'toAddress'}
               options={addresses}
               getOptionLabel={(option) => option}
-              renderInput={(params) => <TextField {...params} label="Куда" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Куда" required />
+              )}
               filterOptions={filterAutocompleteOptions}
               value={toAddress}
               onChange={handleToAddressChange}
