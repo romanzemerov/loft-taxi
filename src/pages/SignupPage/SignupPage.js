@@ -3,56 +3,19 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getIsLoading } from 'redux/auth/reducers';
 import { registerRequest } from 'redux/auth/actions';
-import {
-  Button,
-  Link as MaterialLink,
-  Paper,
-  TextField,
-  Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Link as MaterialLink } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
-import backgroundImage from 'assets/background.jpg';
-
-const useStyles = makeStyles({
-  signupPage: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundImage: `url(${backgroundImage})`,
-  },
-  formWrapper: {
-    marginLeft: '214px',
-  },
-  form: {
-    maxWidth: '500px',
-    padding: '44px 60px',
-  },
-  header: {
-    marginBottom: '30px',
-  },
-  subHeader: {
-    marginBottom: '40px',
-  },
-  section: {
-    display: 'flex',
-    '& > *': {
-      marginRight: '16px',
-    },
-  },
-  input: {
-    marginBottom: '32px',
-    '&:last-of-type': {
-      marginBottom: '0',
-    },
-  },
-  button: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginTop: '40px',
-  },
-});
+import PropTypes from 'prop-types';
+import {
+  StyledSignupPage,
+  StyledFormWrapper,
+  StyledForm,
+  StyledHeader,
+  StyledSubHeader,
+  StyledSection,
+  StyledInput,
+  StyledButton,
+} from './Styled';
 
 const SignupPage = ({ isLoading, registerRequest }) => {
   const [{ email, password, name, surname }, setUser] = useState({
@@ -61,17 +24,6 @@ const SignupPage = ({ isLoading, registerRequest }) => {
     name: '',
     surname: '',
   });
-
-  const {
-    signupPage,
-    formWrapper,
-    form,
-    header,
-    subHeader,
-    section,
-    input,
-    button,
-  } = useStyles();
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
@@ -87,80 +39,72 @@ const SignupPage = ({ isLoading, registerRequest }) => {
   };
 
   return (
-    <div className={signupPage}>
-      <Logo animated={true} white={true} />
-      <div className={formWrapper}>
-        <Paper className={form}>
-          <Typography className={header} variant="h4">
-            Регистрация
-          </Typography>
-          <Typography className={subHeader} variant={'body1'}>
+    <StyledSignupPage>
+      <Logo animated white />
+      <StyledFormWrapper>
+        <StyledForm>
+          <StyledHeader variant="h4">Регистрация</StyledHeader>
+          <StyledSubHeader variant={'body1'}>
             <MaterialLink to="/login" component={Link} data-testid={'link'}>
               &nbsp;Уже зарегистрированы?
             </MaterialLink>
-          </Typography>
-
+          </StyledSubHeader>
           <form onSubmit={handleSubmit}>
-            <TextField
-              className={input}
+            <StyledInput
               type="email"
               name="email"
               id="email"
               label="Адрес электронной почты"
-              fullWidth={true}
+              fullWidth
               value={email}
               onChange={handleInputChange}
-              required={true}
+              required
               inputProps={{
                 'data-testid': 'input-email',
               }}
             />
-            <div className={section}>
-              <TextField
-                className={input}
+            <StyledSection>
+              <StyledInput
                 type="text"
                 name="name"
                 id="name"
                 label="Имя"
-                fullWidth={true}
+                fullWidth
                 value={name}
                 onChange={handleInputChange}
-                required={true}
+                required
                 inputProps={{
                   'data-testid': 'input-name',
                 }}
               />
-              <TextField
-                className={input}
+              <StyledInput
                 type="text"
                 name="surname"
                 id="surname"
                 label="Фамилия"
-                fullWidth={true}
+                fullWidth
                 value={surname}
                 onChange={handleInputChange}
-                required={true}
+                required
                 inputProps={{
                   'data-testid': 'input-surname',
                 }}
               />
-            </div>
-            <TextField
-              className={input}
+            </StyledSection>
+            <StyledInput
               type="password"
               name="password"
               id="password"
               label="Пароль"
-              fullWidth={true}
+              fullWidth
               value={password}
               onChange={handleInputChange}
-              required={true}
+              required
               inputProps={{
                 'data-testid': 'input-password',
               }}
             />
-            <Button
-              className={button}
+            <StyledButton
               type={'submit'}
               variant={'contained'}
               color={'primary'}
@@ -168,12 +112,17 @@ const SignupPage = ({ isLoading, registerRequest }) => {
               disabled={isLoading}
             >
               Зарегистрироваться
-            </Button>
+            </StyledButton>
           </form>
-        </Paper>
-      </div>
-    </div>
+        </StyledForm>
+      </StyledFormWrapper>
+    </StyledSignupPage>
   );
+};
+
+SignupPage.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  registerRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

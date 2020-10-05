@@ -1,26 +1,33 @@
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getUserToken } from 'redux/auth/reducers';
-import { getCard, getIsCardLoaded, getIsLoading } from 'redux/profile/reducers';
+import {
+  getCard,
+  getCardLoadingError,
+  getIsCardLoaded,
+  getIsCardLoading,
+} from 'redux/profile/reducers';
 import { getCardRequest, postCardRequest } from 'redux/profile/actions';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import {
+  StyledPage,
   StyledCard,
   StyledCardContent,
   StyledFormWrapper,
   StyledIconWrapper,
-  StyledProfilePage,
   SubmitButton,
   SubtitleTypography,
-} from './StyledProfilePage';
+} from './Styled';
 import { MCIcon } from 'loft-taxi-mui-theme';
+import PropTypes from 'prop-types';
 
 const ProfilePage = memo(function ProfilePage({
   token,
   creditCard,
-  isLoading,
+  isCardLoading,
   isCardLoaded,
+  loadingError,
   postCardRequest,
   getCardRequest,
 }) {
@@ -56,16 +63,17 @@ const ProfilePage = memo(function ProfilePage({
   };
 
   useEffect(() => {
-    if (!isCardLoaded && !isLoading) {
+    if (!loadingError && !isCardLoaded && !isCardLoading) {
       getCardRequest({ token });
     }
-  }, [token, isCardLoaded, isLoading]);
+  }, [token, isCardLoaded, isCardLoading, loadingError, getCardRequest]);
 
   useEffect(() => {
     setCard(creditCard);
   }, [creditCard]);
+
   return (
-    <StyledProfilePage>
+    <StyledPage>
       <StyledFormWrapper elevation={3}>
         <Typography variant="h4" align="center" gutterBottom>
           Профиль
@@ -130,21 +138,43 @@ const ProfilePage = memo(function ProfilePage({
             size="medium"
             variant="contained"
             color="primary"
-            disabled={isLoading}
+            disabled={isCardLoading}
           >
             Сохранить
           </SubmitButton>
         </form>
       </StyledFormWrapper>
-    </StyledProfilePage>
+    </StyledPage>
   );
 });
+
+ProfilePage.propTypes = {
+  token: PropTypes.string.isRequired,
+  creditCard: PropTypes.exact({
+    number: PropTypes.string.isRequired,
+    expireDate: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.instanceOf(null),
+    ]),
+    name: PropTypes.string.isRequired,
+    secretCode: PropTypes.string.isRequired,
+  }),
+  isCardLoading: PropTypes.bool.isRequired,
+  isCardLoaded: PropTypes.bool.isRequired,
+  loadingError: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.instanceOf(null),
+  ]),
+  postCardRequest: PropTypes.func.isRequired,
+  getCardRequest: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   token: getUserToken(state),
   creditCard: getCard(state),
-  isLoading: getIsLoading(state),
+  isCardLoading: getIsCardLoading(state),
   isCardLoaded: getIsCardLoaded(state),
+  loadingError: getCardLoadingError(state),
 });
 
 const mapDispatchToProps = {

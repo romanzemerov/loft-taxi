@@ -3,6 +3,7 @@
 # editors
 .vscode
 .idea
+.run
 
 # dependencies
 /node_modules

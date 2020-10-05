@@ -8,11 +8,13 @@ import {
 } from '@material-ui/core';
 import backgroundImage from 'assets/background.jpg';
 
-export const StyledProfilePage = styled.div`
+export const StyledPage = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
   background-image: url('${backgroundImage}');
 `;
 

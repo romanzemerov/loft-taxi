@@ -27,7 +27,6 @@ const auth = createReducer(initialState, {
     state.isLoading = false;
     state.isLoggedIn = true;
     state.user = payload.user;
-    state.error = null;
   },
   [loginFailure]: (state, { payload }) => {
     state.isLoading = false;
@@ -45,7 +44,6 @@ const auth = createReducer(initialState, {
     state.isLoading = false;
     state.isLoggedIn = true;
     state.user = payload.user;
-    state.error = null;
   },
   [registerFailure]: (state, { payload }) => {
     state.isLoading = false;

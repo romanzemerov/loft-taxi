@@ -32,7 +32,6 @@ const profile = createReducer(initialState, {
     state.isLoading = false;
     state.isCardLoaded = true;
     state.card = payload;
-    state.error = null;
   },
   [postCardFailure]: (state, { payload }) => {
     state.isLoading = false;
@@ -50,7 +49,6 @@ const profile = createReducer(initialState, {
     state.isLoading = false;
     state.isCardLoaded = true;
     state.card = payload;
-    state.error = null;
   },
   [getCardFailure]: (state, { payload }) => {
     state.isLoading = false;
@@ -60,7 +58,7 @@ const profile = createReducer(initialState, {
   },
 });
 
-export const getIsLoading = createSelector(
+export const getIsCardLoading = createSelector(
   (state) => state.profile.isLoading,
   (isLoading) => isLoading,
 );
@@ -73,6 +71,16 @@ export const getIsCardLoaded = createSelector(
 export const getCard = createSelector(
   (state) => state.profile.card,
   (card) => card,
+);
+
+export const getIsCardExist = createSelector(
+  (state) => state.profile.card,
+  (card) => card !== defaultCardState,
+);
+
+export const getCardLoadingError = createSelector(
+  (state) => state.profile.error,
+  (error) => error,
 );
 
 export default profile;

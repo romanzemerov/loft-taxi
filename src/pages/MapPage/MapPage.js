@@ -1,38 +1,109 @@
-import React, { useEffect, useRef } from 'react';
+import React, { PureComponent } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import RouteChoicer from './components/RouteChoicer';
+import InfoBox from 'components/InfoBox';
+import { getCardRequest } from 'redux/profile/actions';
+import { getUserToken } from 'redux/auth/reducers';
+import {
+  getIsCardExist,
+  getIsCardLoaded,
+  getIsCardLoading,
+} from 'redux/profile/reducers';
+import { getRoute } from 'redux/route/reducers';
+import { drawRoute } from 'pages/MapPage/helpers/drawRoute';
+import PropTypes from 'prop-types';
+import { StyledPage, StyledMap, StyledPanel } from './Styled';
 
-const useStyles = makeStyles({
-  map: {
-    minHeight: 'calc(100vh - 68px)',
-  },
-});
+class MapPage extends PureComponent {
+  map = null;
+  mapContainer = React.createRef();
 
-mapboxgl.accessToken =
-  'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg';
+  componentDidMount() {
+    const { token, routeCoords, getCardRequest, isCardLoaded } = this.props;
 
-const MapPage = () => {
-  const classes = useStyles();
-  const mapContainerRef = useRef(null);
+    if (!isCardLoaded) {
+      getCardRequest({ token });
+    }
 
-  useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
+    this.map = new mapboxgl.Map({
+      accessToken: process.env['REACT_APP_MAPBOX_TOKEN'],
+      container: this.mapContainer.current,
       style: 'mapbox://styles/romanzemerov/ckf4es8aq1l3j19n5iz5mhxkm',
-      center: [36.58, 50.59],
-      zoom: 9,
+      center: [30.2656504, 59.8029126],
+      zoom: 10,
     });
 
-    return () => map.remove();
-  }, []);
+    this.map.on('load', () => {
+      if (routeCoords) {
+        drawRoute(this.map, this.props.routeCoords);
+      }
+    });
+  }
 
-  return (
-    <div data-testid={'mapSection'}>
-      <div className={classes.map} ref={mapContainerRef}>
-        Карта
-      </div>
-    </div>
-  );
+  componentDidUpdate() {
+    const { routeCoords } = this.props;
+
+    if (this.map.getLayer('route')) {
+      this.map.removeLayer('route');
+      this.map.removeSource('route');
+    }
+
+    if (routeCoords) {
+      drawRoute(this.map, routeCoords);
+    }
+  }
+
+  componentWillUnmount() {
+    this.map.remove();
+  }
+
+  render() {
+    const { isCardExist, isCardLoading } = this.props;
+
+    const getInfoPanel = () => {
+      if (isCardLoading) {
+        return null;
+      }
+
+      return (
+        <StyledPanel>
+          {isCardExist ? <RouteChoicer /> : <InfoBox type={'noCard'} />}
+        </StyledPanel>
+      );
+    };
+
+    return (
+      <StyledPage data-testid={'mapSection'}>
+        {getInfoPanel()}
+        <StyledMap ref={this.mapContainer} />
+      </StyledPage>
+    );
+  }
+}
+
+MapPage.propTypes = {
+  token: PropTypes.string.isRequired,
+  isCardLoading: PropTypes.bool.isRequired,
+  isCardLoaded: PropTypes.bool.isRequired,
+  isCardExist: PropTypes.bool.isRequired,
+  routeCoords: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.array).isRequired,
+    PropTypes.instanceOf(null),
+  ]),
+  getCardRequest: PropTypes.func.isRequired,
 };
 
-export default MapPage;
+const mapStateToProps = (state) => ({
+  token: getUserToken(state),
+  isCardLoading: getIsCardLoading(state),
+  isCardLoaded: getIsCardLoaded(state),
+  isCardExist: getIsCardExist(state),
+  routeCoords: getRoute(state),
+});
+
+const mapDispatchToProps = {
+  getCardRequest,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

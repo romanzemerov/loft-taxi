@@ -1,5 +1,5 @@
 import React from 'react';
-import App from 'App';
+import App from 'components/App/App';
 import { cleanup, render } from '@testing-library/react';
 
 jest.mock('./components/Map', () => ({
