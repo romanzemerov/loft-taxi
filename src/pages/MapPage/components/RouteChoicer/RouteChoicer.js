@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import InfoBox from 'components/InfoBox';
-import { TextField } from '@material-ui/core';
 import {
   getAddresses,
-  getIsLoading,
   getIsAddressesLoaded,
+  getIsLoading,
 } from 'redux/addresses/reducers';
 import { getRoute } from 'redux/route/reducers';
 import { getAddressesRequest } from 'redux/addresses/actions';
 import { getRouteRequest, resetRoute } from 'redux/route/actions';
 import PropTypes from 'prop-types';
-import { StyledWrapper, StyledAutocomplete, StyledButton } from './Styled';
+import { StyledButton, StyledWrapper } from './Styled';
 import * as yup from 'yup';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import RouteAutocomplete from './components/RouteAutocomplete';
 
 const schema = yup.object().shape({
   fromAddress: yup
@@ -38,21 +38,11 @@ const RouteChoicer = ({
   getRouteRequest,
   resetRoute,
 }) => {
+  const [orderPlaced, setOrderPlaced] = useState(false);
   const { handleSubmit, errors, control, trigger, getValues, reset } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
-  const [orderPlaced, setOrderPlaced] = useState(false);
-
-  const filterAutocompleteOptions = (options) => {
-    return options
-      ? options.filter(
-          (address) =>
-            address !== getValues('toAddress') &&
-            address !== getValues('fromAddress'),
-        )
-      : options;
-  };
 
   const onSubmit = (data) => {
     getRouteRequest(data);
@@ -86,62 +76,34 @@ const RouteChoicer = ({
       ) : (
         <StyledWrapper elevation={3}>
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name={'fromAddress'}
-              control={control}
-              defaultValue={null}
-              render={({ onChange, value, name }) => (
-                <StyledAutocomplete
-                  id={name}
-                  name={name}
-                  options={addresses}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Откуда"
-                      error={!!errors.fromAddress}
-                      helperText={errors?.fromAddress?.message}
-                      required
-                    />
-                  )}
-                  filterOptions={filterAutocompleteOptions}
-                  value={value}
-                  onChange={(_, value) => {
-                    onChange(value);
-                    trigger(name);
-                  }}
-                  disabled={isLoading}
-                />
-              )}
+            <RouteAutocomplete
+              options={{
+                name: 'fromAddress',
+                label: 'Откуда',
+                isLoading,
+                addresses,
+              }}
+              formData={{
+                control,
+                error: errors.fromAddress,
+                trigger,
+                getValues,
+              }}
             />
-            <Controller
-              name={'toAddress'}
-              control={control}
-              defaultValue={null}
-              render={({ onChange, value, name }) => (
-                <StyledAutocomplete
-                  id={name}
-                  name={name}
-                  options={addresses}
-                  getOptionLabel={(option) => option}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Куда"
-                      error={!!errors.toAddress}
-                      helperText={errors?.toAddress?.message}
-                      required
-                    />
-                  )}
-                  filterOptions={filterAutocompleteOptions}
-                  value={value}
-                  onChange={(_, value) => {
-                    onChange(value);
-                    trigger(name);
-                  }}
-                  disabled={isLoading}
-                />
-              )}
+
+            <RouteAutocomplete
+              options={{
+                name: 'toAddress',
+                label: 'Куда',
+                isLoading,
+                addresses,
+              }}
+              formData={{
+                control,
+                error: errors.toAddress,
+                trigger,
+                getValues,
+              }}
             />
 
             <StyledButton
