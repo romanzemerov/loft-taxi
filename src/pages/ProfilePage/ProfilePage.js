@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getUserToken } from 'redux/auth/reducers';
 import {
@@ -19,8 +19,44 @@ import {
   SubmitButton,
   SubtitleTypography,
 } from './Styled';
+import * as yup from 'yup';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { MCIcon } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
+import { DateTime } from 'luxon';
+
+const schema = yup.object().shape({
+  number: yup
+    .string()
+    .length(19, 'Номер кредитной карты должен содержать 16 символов ')
+    .required('Обязательное для заполнения поле'),
+  expireDate: yup
+    .date()
+    .min(
+      `${DateTime.local().minus({ month: 1 }).endOf('month')}`,
+      'Срок действия карты истек',
+    )
+    .required('Обязательное для заполнения поле'),
+  name: yup
+    .string()
+    .matches(/^([^0-9]*)$/, 'Имя владельца карты не должно содержать цифры')
+    .required('Обязательное для заполнения поле'),
+  secretCode: yup
+    .string()
+    .length(3, 'CVC-код состоять из трех символов')
+    .required('Обязательное для заполнения поле'),
+});
+
+const normalizeCardNumber = (value) => {
+  return (
+    value
+      .replace(/\s/g, '')
+      .match(/.{1,4}/g)
+      ?.join(' ')
+      .substr(0, 19) || ''
+  );
+};
 
 const ProfilePage = memo(function ProfilePage({
   token,
@@ -31,27 +67,13 @@ const ProfilePage = memo(function ProfilePage({
   postCardRequest,
   getCardRequest,
 }) {
-  const [card, setCard] = useState(creditCard);
-  const { number, expireDate, name, secretCode } = card;
+  const { register, handleSubmit, errors, control, trigger } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
+  });
 
-  const handleInputChange = ({ target }) => {
-    const { value, name } = target;
-
-    setCard((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleDateChange = (e) => {
-    setCard((prevState) => ({
-      ...prevState,
-      expireDate: e,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    const { number, expireDate, name, secretCode } = data;
 
     postCardRequest({
       cardNumber: number,
@@ -68,10 +90,6 @@ const ProfilePage = memo(function ProfilePage({
     }
   }, [token, isCardLoaded, isCardLoading, loadingError, getCardRequest]);
 
-  useEffect(() => {
-    setCard(creditCard);
-  }, [creditCard]);
-
   return (
     <StyledPage>
       <StyledFormWrapper elevation={3}>
@@ -82,7 +100,7 @@ const ProfilePage = memo(function ProfilePage({
           Способ оплаты
         </SubtitleTypography>
 
-        <form onSubmit={handleSubmit}>
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <Grid container justify="center" spacing={4}>
             <Grid item xs={12} sm={6}>
               <StyledCard>
@@ -94,19 +112,40 @@ const ProfilePage = memo(function ProfilePage({
                     name={'number'}
                     label="Номер карты"
                     placeholder={'0000 0000 0000 0000'}
-                    value={number}
-                    onChange={handleInputChange}
+                    inputRef={register}
+                    error={!!errors.number}
+                    helperText={errors?.number?.message}
+                    defaultValue={creditCard.number}
+                    onChange={({ target }) => {
+                      const { value } = target;
+                      target.value = normalizeCardNumber(value);
+                    }}
                   />
-                  <KeyboardDatePicker
-                    placeholder="ММ/ГГ"
-                    label="Срок действия:"
-                    format="MM/yy"
-                    views={['month', 'year']}
-                    clearable
-                    required
-                    onChange={handleDateChange}
+                  <Controller
+                    control={control}
                     name={'expireDate'}
-                    value={expireDate}
+                    defaultValue={creditCard.expireDate}
+                    render={({ onChange, value, name }) => {
+                      return (
+                        <KeyboardDatePicker
+                          name={name}
+                          id={name}
+                          placeholder="ММ/ГГ"
+                          label="Срок действия:"
+                          format="MM/yy"
+                          views={['month', 'year']}
+                          clearable
+                          onChange={(e) => {
+                            onChange(e);
+                            trigger(name);
+                          }}
+                          value={value}
+                          error={!!errors.expireDate}
+                          helperText={errors?.expireDate?.message}
+                          required
+                        />
+                      );
+                    }}
                   />
                 </StyledCardContent>
               </StyledCard>
@@ -117,16 +156,25 @@ const ProfilePage = memo(function ProfilePage({
                   <TextField
                     label="Имя владельца"
                     name={'name'}
-                    value={name}
-                    onChange={handleInputChange}
                     required
+                    inputRef={register}
+                    error={!!errors.name}
+                    helperText={errors?.name?.message}
+                    defaultValue={creditCard.name}
+                    onChange={({ target }) => {
+                      const { value } = target;
+                      target.value = value.toUpperCase();
+                    }}
                   />
                   <TextField
                     label="CVC"
+                    type={'password'}
                     name={'secretCode'}
-                    value={secretCode}
-                    onChange={handleInputChange}
                     required
+                    inputRef={register}
+                    error={!!errors.secretCode}
+                    helperText={errors?.secretCode?.message}
+                    defaultValue={creditCard.secretCode}
                   />
                 </StyledCardContent>
               </StyledCard>

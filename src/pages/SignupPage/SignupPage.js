@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getIsLoading } from 'redux/auth/reducers';
@@ -16,26 +16,31 @@ import {
   StyledInput,
   StyledButton,
 } from './Styled';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Некорректный email')
+    .required('Обязательное для заполнения поле'),
+  name: yup.string().required('Обязательное для заполнения поле'),
+  surname: yup.string().required('Обязательное для заполнения поле'),
+  password: yup
+    .string()
+    .min(8, 'Пароль должен содержать минимиум 8 симоволов')
+    .required('Обязательное для заполнения поле'),
+});
 
 const SignupPage = ({ isLoading, registerRequest }) => {
-  const [{ email, password, name, surname }, setUser] = useState({
-    email: '',
-    password: '',
-    name: '',
-    surname: '',
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
   });
 
-  const handleInputChange = ({ target }) => {
-    const { name, value } = target;
-    setUser((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    registerRequest({ email, password, name, surname });
+  const onSubmit = (data) => {
+    registerRequest(data);
   };
 
   return (
@@ -49,16 +54,17 @@ const SignupPage = ({ isLoading, registerRequest }) => {
               &nbsp;Уже зарегистрированы?
             </MaterialLink>
           </StyledSubHeader>
-          <form onSubmit={handleSubmit}>
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <StyledInput
               type="email"
               name="email"
               id="email"
               label="Адрес электронной почты"
               fullWidth
-              value={email}
-              onChange={handleInputChange}
               required
+              error={!!errors.email}
+              helperText={errors?.email?.message}
+              inputRef={register}
               inputProps={{
                 'data-testid': 'input-email',
               }}
@@ -69,10 +75,11 @@ const SignupPage = ({ isLoading, registerRequest }) => {
                 name="name"
                 id="name"
                 label="Имя"
-                fullWidth
-                value={name}
-                onChange={handleInputChange}
                 required
+                fullWidth
+                error={!!errors.name}
+                helperText={errors?.name?.message}
+                inputRef={register}
                 inputProps={{
                   'data-testid': 'input-name',
                 }}
@@ -83,9 +90,10 @@ const SignupPage = ({ isLoading, registerRequest }) => {
                 id="surname"
                 label="Фамилия"
                 fullWidth
-                value={surname}
-                onChange={handleInputChange}
                 required
+                error={!!errors.surname}
+                helperText={errors?.surname?.message}
+                inputRef={register}
                 inputProps={{
                   'data-testid': 'input-surname',
                 }}
@@ -97,9 +105,10 @@ const SignupPage = ({ isLoading, registerRequest }) => {
               id="password"
               label="Пароль"
               fullWidth
-              value={password}
-              onChange={handleInputChange}
               required
+              error={!!errors.password}
+              helperText={errors?.password?.message}
+              inputRef={register}
               inputProps={{
                 'data-testid': 'input-password',
               }}
