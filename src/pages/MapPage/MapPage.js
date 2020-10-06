@@ -27,7 +27,8 @@ class MapPage extends PureComponent {
     }
 
     this.map = new mapboxgl.Map({
-      accessToken: process.env['REACT_APP_MAPBOX_TOKEN'],
+      accessToken:
+        'pk.eyJ1Ijoicm9tYW56ZW1lcm92IiwiYSI6ImNrZjRlcGdhcDBjY3IyeHA5Mzl3aHk4NncifQ.CVAivYa4dl9DMVGJUoqMTg',
       container: this.mapContainer.current,
       style: 'mapbox://styles/romanzemerov/ckf4es8aq1l3j19n5iz5mhxkm',
       center: [30.2656504, 59.8029126],
