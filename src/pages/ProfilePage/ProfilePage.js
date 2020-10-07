@@ -77,7 +77,7 @@ const ProfilePage = memo(function ProfilePage({
 
     postCardRequest({
       cardNumber: number,
-      expiryDate: expireDate,
+      expiryDate: expireDate.toJSON(),
       cardName: name,
       cvc: secretCode,
       token,
