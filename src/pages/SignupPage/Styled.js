@@ -11,11 +11,12 @@ export const StyledSignupPage = styled.div`
 `;
 
 export const StyledFormWrapper = styled.div`
+  max-width: 500px;
+  width: 100%;
   margin-left: 214px;
 `;
 
 export const StyledForm = styled(Paper)`
-  max-width: 500px;
   padding: 44px 60px;
 `;
 
@@ -37,10 +38,10 @@ export const StyledSection = styled.div`
 
 export const StyledInput = styled(TextField)`
   margin-bottom: 32px;
-  
+
   &:last-of-type {
     margin-bottom: 0;
-  },
+  }
 `;
 
 export const StyledButton = styled(Button)`
