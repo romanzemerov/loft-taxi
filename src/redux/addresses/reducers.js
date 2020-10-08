@@ -1,4 +1,4 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   getAddressesRequest,
   getAddressesSuccess,

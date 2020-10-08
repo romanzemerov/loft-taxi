@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 export const getIsLoading = createSelector(
-  (state) => state.addresses.isLoading,
+  (state) => state.route.isLoading,
   (isLoading) => isLoading,
 );
 
