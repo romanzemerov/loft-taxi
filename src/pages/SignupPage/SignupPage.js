@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getIsLoading } from 'redux/auth/reducers';
 import { registerRequest } from 'redux/auth/actions';
-import { Link as MaterialLink } from '@material-ui/core';
+import { Link as MaterialLink, Grid, TextField } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
 import {
@@ -12,8 +12,6 @@ import {
   StyledForm,
   StyledHeader,
   StyledSubHeader,
-  StyledSection,
-  StyledInput,
   StyledButton,
 } from './Styled';
 import * as yup from 'yup';
@@ -55,11 +53,12 @@ const SignupPage = ({ isLoading, registerRequest }) => {
             </MaterialLink>
           </StyledSubHeader>
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <StyledInput
+            <TextField
               type="email"
               name="email"
               id="email"
               label="Адрес электронной почты"
+              margin="normal"
               fullWidth
               required
               error={!!errors.email}
@@ -69,41 +68,46 @@ const SignupPage = ({ isLoading, registerRequest }) => {
                 'data-testid': 'input-email',
               }}
             />
-            <StyledSection>
-              <StyledInput
-                type="text"
-                name="name"
-                id="name"
-                label="Имя"
-                required
-                fullWidth
-                error={!!errors.name}
-                helperText={errors?.name?.message}
-                inputRef={register}
-                inputProps={{
-                  'data-testid': 'input-name',
-                }}
-              />
-              <StyledInput
-                type="text"
-                name="surname"
-                id="surname"
-                label="Фамилия"
-                fullWidth
-                required
-                error={!!errors.surname}
-                helperText={errors?.surname?.message}
-                inputRef={register}
-                inputProps={{
-                  'data-testid': 'input-surname',
-                }}
-              />
-            </StyledSection>
-            <StyledInput
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="text"
+                  name="name"
+                  id="name"
+                  label="Имя"
+                  margin="normal"
+                  required
+                  error={!!errors.name}
+                  helperText={errors?.name?.message}
+                  inputRef={register}
+                  inputProps={{
+                    'data-testid': 'input-name',
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="text"
+                  name="surname"
+                  id="surname"
+                  label="Фамилия"
+                  margin="normal"
+                  required
+                  error={!!errors.surname}
+                  helperText={errors?.surname?.message}
+                  inputRef={register}
+                  inputProps={{
+                    'data-testid': 'input-surname',
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <TextField
               type="password"
               name="password"
               id="password"
               label="Пароль"
+              margin="normal"
               fullWidth
               required
               error={!!errors.password}
