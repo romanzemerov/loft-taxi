@@ -1,4 +1,4 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   postCardRequest,
   postCardSuccess,
@@ -8,7 +8,7 @@ import {
   getCardFailure,
 } from 'redux/profile/actions';
 
-const defaultCardState = {
+export const defaultCardState = {
   number: '',
   expireDate: null,
   name: '',
@@ -57,30 +57,5 @@ const profile = createReducer(initialState, {
     state.error = payload;
   },
 });
-
-export const getIsCardLoading = createSelector(
-  (state) => state.profile.isLoading,
-  (isLoading) => isLoading,
-);
-
-export const getIsCardLoaded = createSelector(
-  (state) => state.profile.isCardLoaded,
-  (isCardLoaded) => isCardLoaded,
-);
-
-export const getCard = createSelector(
-  (state) => state.profile.card,
-  (card) => card,
-);
-
-export const getIsCardExist = createSelector(
-  (state) => state.profile.card,
-  (card) => card !== defaultCardState,
-);
-
-export const getCardLoadingError = createSelector(
-  (state) => state.profile.error,
-  (error) => error,
-);
 
 export default profile;

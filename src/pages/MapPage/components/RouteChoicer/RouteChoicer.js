@@ -5,8 +5,8 @@ import {
   getAddresses,
   getIsAddressesLoaded,
   getIsLoading,
-} from 'redux/addresses/reducers';
-import { getRoute } from 'redux/route/reducers';
+} from 'redux/addresses/selectors';
+import { getRoute } from 'redux/route/selectors';
 import { getAddressesRequest } from 'redux/addresses/actions';
 import { getRouteRequest, resetRoute } from 'redux/route/actions';
 import PropTypes from 'prop-types';

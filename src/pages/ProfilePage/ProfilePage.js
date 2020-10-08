@@ -1,12 +1,12 @@
 import React, { memo, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getUserToken } from 'redux/auth/reducers';
+import { getUserToken } from 'redux/auth/selectors';
 import {
   getCard,
   getCardLoadingError,
   getIsCardLoaded,
   getIsCardLoading,
-} from 'redux/profile/reducers';
+} from 'redux/profile/selectors';
 import { getCardRequest, postCardRequest } from 'redux/profile/actions';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';

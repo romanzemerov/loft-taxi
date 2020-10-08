@@ -1,4 +1,4 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   loginRequest,
   loginSuccess,
@@ -58,20 +58,5 @@ const auth = createReducer(initialState, {
     state.error = null;
   },
 });
-
-export const getIsLoggedIn = createSelector(
-  (state) => state.auth.isLoggedIn,
-  (isLoggedIn) => isLoggedIn,
-);
-
-export const getIsLoading = createSelector(
-  (state) => state.auth.isLoading,
-  (isLoading) => isLoading,
-);
-
-export const getUserToken = createSelector(
-  (state) => state.auth.user,
-  ({ token }) => token,
-);
 
 export default auth;

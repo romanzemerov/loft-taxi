@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getIsLoading } from 'redux/auth/reducers';
+import { getIsLoading } from 'redux/auth/selectors';
 import { registerRequest } from 'redux/auth/actions';
 import { Link as MaterialLink, Grid, TextField } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';

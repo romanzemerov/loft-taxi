@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import RouteChoicer from './components/RouteChoicer';
 import InfoBox from 'components/InfoBox';
 import { getCardRequest } from 'redux/profile/actions';
-import { getUserToken } from 'redux/auth/reducers';
+import { getUserToken } from 'redux/auth/selectors';
 import {
   getIsCardExist,
   getIsCardLoaded,
   getIsCardLoading,
-} from 'redux/profile/reducers';
-import { getRoute } from 'redux/route/reducers';
+} from 'redux/profile/selectors';
+import { getRoute } from 'redux/route/selectors';
 import { drawRoute } from 'pages/MapPage/helpers/drawRoute';
 import PropTypes from 'prop-types';
 import { StyledPage, StyledMap, StyledPanel } from './Styled';
