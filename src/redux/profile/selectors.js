@@ -25,3 +25,8 @@ export const getCardLoadingError = createSelector(
   (state) => state.profile.error,
   (error) => error,
 );
+
+export const getIsCardUpdate = createSelector(
+  (state) => state.profile.isUpdated,
+  (isUpdated) => isUpdated,
+);

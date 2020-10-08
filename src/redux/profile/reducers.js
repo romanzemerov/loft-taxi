@@ -6,6 +6,7 @@ import {
   getCardRequest,
   getCardSuccess,
   getCardFailure,
+  resetUpdateCard,
 } from 'redux/profile/actions';
 
 export const defaultCardState = {
@@ -19,6 +20,7 @@ const initialState = {
   isLoading: false,
   card: defaultCardState,
   isCardLoaded: false,
+  isUpdated: false,
   error: null,
 };
 
@@ -26,17 +28,20 @@ const profile = createReducer(initialState, {
   [postCardRequest]: (state) => {
     state.isLoading = true;
     state.isCardLoaded = false;
+    state.isUpdated = false;
     state.error = null;
   },
   [postCardSuccess]: (state, { payload }) => {
     state.isLoading = false;
     state.isCardLoaded = true;
+    state.isUpdated = true;
     state.card = payload;
   },
   [postCardFailure]: (state, { payload }) => {
     state.isLoading = false;
     state.isCardLoaded = false;
     state.card = defaultCardState;
+    state.isUpdated = false;
     state.error = payload;
   },
   [getCardRequest]: (state) => {
@@ -55,6 +60,9 @@ const profile = createReducer(initialState, {
     state.isCardLoaded = false;
     state.card = defaultCardState;
     state.error = payload;
+  },
+  [resetUpdateCard]: (state) => {
+    state.isUpdated = false;
   },
 });
 

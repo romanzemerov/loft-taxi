@@ -6,6 +6,7 @@ import {
   getCardRequest,
   getCardSuccess,
   getCardFailure,
+  resetUpdateCard,
 } from './actions';
 
 const defaultCardState = {
@@ -24,6 +25,7 @@ describe('Profile reducer', () => {
         isLoading: true,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: null,
       });
     });
@@ -47,6 +49,7 @@ describe('Profile reducer', () => {
           name: 'test name',
           secretCode: 'test secret code',
         },
+        isUpdated: true,
         isCardLoaded: true,
         error: null,
       });
@@ -62,6 +65,7 @@ describe('Profile reducer', () => {
         isLoading: false,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: 'test error message',
       });
     });
@@ -74,6 +78,7 @@ describe('Profile reducer', () => {
         isLoading: true,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: null,
       });
     });
@@ -97,6 +102,7 @@ describe('Profile reducer', () => {
           name: 'test name',
           secretCode: 'test secret code',
         },
+        isUpdated: false,
         isCardLoaded: true,
         error: null,
       });
@@ -112,8 +118,21 @@ describe('Profile reducer', () => {
         isLoading: false,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: 'test error message',
       });
+    });
+  });
+
+  it('should return state with resetting updated field', () => {
+    const state = profileReducer(undefined, resetUpdateCard());
+
+    expect(state).toEqual({
+      isLoading: false,
+      card: defaultCardState,
+      isCardLoaded: false,
+      isUpdated: false,
+      error: null,
     });
   });
 });

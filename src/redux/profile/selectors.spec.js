@@ -4,6 +4,7 @@ import {
   getCard,
   getIsCardExist,
   getCardLoadingError,
+  getIsCardUpdate,
 } from 'redux/profile/selectors';
 import { defaultCardState } from 'redux/profile/reducers';
 
@@ -13,6 +14,7 @@ describe('Profile selectors', () => {
       isLoading: false,
       card: defaultCardState,
       isCardLoaded: false,
+      isUpdated: false,
       error: null,
     },
   };
@@ -27,6 +29,7 @@ describe('Profile selectors', () => {
         isLoading: true,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: null,
       },
     };
@@ -40,6 +43,7 @@ describe('Profile selectors', () => {
         isLoading: false,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: null,
       },
     };
@@ -58,11 +62,12 @@ describe('Profile selectors', () => {
         isLoading: false,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: null,
       },
     };
 
-    expect(getIsCardExist(TEST_STATE)).toEqual(false);
+    expect(getIsCardExist(TEST_STATE)).toBe(false);
   });
 
   it('should return truthy existing card state ', () => {
@@ -76,11 +81,12 @@ describe('Profile selectors', () => {
           secretCode: 'testSecretCode',
         },
         isCardLoaded: true,
+        isUpdated: false,
         error: null,
       },
     };
 
-    expect(getIsCardExist(TEST_STATE)).toEqual(true);
+    expect(getIsCardExist(TEST_STATE)).toBe(true);
   });
 
   it('should return falsy existing card state ', () => {
@@ -89,10 +95,30 @@ describe('Profile selectors', () => {
         isLoading: false,
         card: defaultCardState,
         isCardLoaded: false,
+        isUpdated: false,
         error: 'testError',
       },
     };
 
-    expect(getCardLoadingError(TEST_STATE)).toEqual('testError');
+    expect(getCardLoadingError(TEST_STATE)).toBe('testError');
+  });
+
+  it('should return truthy updated card state ', () => {
+    const TEST_STATE = {
+      profile: {
+        isLoading: false,
+        card: {
+          number: 'testNumber',
+          expireDate: 'testExpireDate',
+          name: 'testName',
+          secretCode: 'testSecretCode',
+        },
+        isCardLoaded: false,
+        isUpdated: true,
+        error: null,
+      },
+    };
+
+    expect(getIsCardUpdate(TEST_STATE)).toBe(true);
   });
 });

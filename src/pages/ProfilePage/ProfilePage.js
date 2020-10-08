@@ -6,8 +6,14 @@ import {
   getCardLoadingError,
   getIsCardLoaded,
   getIsCardLoading,
+  getIsCardUpdate,
 } from 'redux/profile/selectors';
-import { getCardRequest, postCardRequest } from 'redux/profile/actions';
+import {
+  getCardRequest,
+  postCardRequest,
+  resetUpdateCard,
+} from 'redux/profile/actions';
+import InfoBox from 'components/InfoBox';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import {
@@ -64,8 +70,10 @@ const ProfilePage = memo(function ProfilePage({
   isCardLoading,
   isCardLoaded,
   loadingError,
+  isCardUpdate,
   postCardRequest,
   getCardRequest,
+  resetUpdateCard,
 }) {
   const { register, handleSubmit, errors, control, trigger } = useForm({
     mode: 'onBlur',
@@ -92,106 +100,110 @@ const ProfilePage = memo(function ProfilePage({
 
   return (
     <StyledPage>
-      <StyledFormWrapper elevation={3}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Профиль
-        </Typography>
-        <SubtitleTypography variant="subtitle1" align="center">
-          Способ оплаты
-        </SubtitleTypography>
+      {isCardUpdate ? (
+        <InfoBox type={'successAddedCard'} onClickButton={resetUpdateCard} />
+      ) : (
+        <StyledFormWrapper elevation={3}>
+          <Typography variant="h4" align="center" gutterBottom>
+            Профиль
+          </Typography>
+          <SubtitleTypography variant="subtitle1" align="center">
+            Способ оплаты
+          </SubtitleTypography>
 
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
-          <Grid container justify="center" spacing={4}>
-            <Grid item xs={12} sm={6}>
-              <StyledCard>
-                <StyledCardContent>
-                  <StyledIconWrapper>
-                    <MCIcon />
-                  </StyledIconWrapper>
-                  <TextField
-                    name={'number'}
-                    label="Номер карты"
-                    placeholder={'0000 0000 0000 0000'}
-                    inputRef={register}
-                    error={!!errors.number}
-                    helperText={errors?.number?.message}
-                    defaultValue={creditCard.number}
-                    onChange={({ target }) => {
-                      const { value } = target;
-                      target.value = normalizeCardNumber(value);
-                    }}
-                  />
-                  <Controller
-                    control={control}
-                    name={'expireDate'}
-                    defaultValue={creditCard.expireDate}
-                    render={({ onChange, value, name }) => {
-                      return (
-                        <KeyboardDatePicker
-                          name={name}
-                          id={name}
-                          placeholder="ММ/ГГ"
-                          label="Срок действия:"
-                          format="MM/yy"
-                          views={['month', 'year']}
-                          clearable
-                          onChange={(e) => {
-                            onChange(e);
-                            trigger(name);
-                          }}
-                          value={value}
-                          error={!!errors.expireDate}
-                          helperText={errors?.expireDate?.message}
-                          required
-                        />
-                      );
-                    }}
-                  />
-                </StyledCardContent>
-              </StyledCard>
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <Grid container justify="center" spacing={4}>
+              <Grid item xs={12} sm={6}>
+                <StyledCard>
+                  <StyledCardContent>
+                    <StyledIconWrapper>
+                      <MCIcon />
+                    </StyledIconWrapper>
+                    <TextField
+                      name={'number'}
+                      label="Номер карты"
+                      placeholder={'0000 0000 0000 0000'}
+                      inputRef={register}
+                      error={!!errors.number}
+                      helperText={errors?.number?.message}
+                      defaultValue={creditCard.number}
+                      onChange={({ target }) => {
+                        const { value } = target;
+                        target.value = normalizeCardNumber(value);
+                      }}
+                    />
+                    <Controller
+                      control={control}
+                      name={'expireDate'}
+                      defaultValue={creditCard.expireDate}
+                      render={({ onChange, value, name }) => {
+                        return (
+                          <KeyboardDatePicker
+                            name={name}
+                            id={name}
+                            placeholder="ММ/ГГ"
+                            label="Срок действия:"
+                            format="MM/yy"
+                            views={['month', 'year']}
+                            clearable
+                            onChange={(e) => {
+                              onChange(e);
+                              trigger(name);
+                            }}
+                            value={value}
+                            error={!!errors.expireDate}
+                            helperText={errors?.expireDate?.message}
+                            required
+                          />
+                        );
+                      }}
+                    />
+                  </StyledCardContent>
+                </StyledCard>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <StyledCard>
+                  <StyledCardContent>
+                    <TextField
+                      label="Имя владельца"
+                      name={'name'}
+                      required
+                      inputRef={register}
+                      error={!!errors.name}
+                      helperText={errors?.name?.message}
+                      defaultValue={creditCard.name}
+                      onChange={({ target }) => {
+                        const { value } = target;
+                        target.value = value.toUpperCase();
+                      }}
+                    />
+                    <TextField
+                      label="CVC"
+                      type={'password'}
+                      name={'secretCode'}
+                      required
+                      inputRef={register}
+                      error={!!errors.secretCode}
+                      helperText={errors?.secretCode?.message}
+                      defaultValue={creditCard.secretCode}
+                    />
+                  </StyledCardContent>
+                </StyledCard>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <StyledCard>
-                <StyledCardContent>
-                  <TextField
-                    label="Имя владельца"
-                    name={'name'}
-                    required
-                    inputRef={register}
-                    error={!!errors.name}
-                    helperText={errors?.name?.message}
-                    defaultValue={creditCard.name}
-                    onChange={({ target }) => {
-                      const { value } = target;
-                      target.value = value.toUpperCase();
-                    }}
-                  />
-                  <TextField
-                    label="CVC"
-                    type={'password'}
-                    name={'secretCode'}
-                    required
-                    inputRef={register}
-                    error={!!errors.secretCode}
-                    helperText={errors?.secretCode?.message}
-                    defaultValue={creditCard.secretCode}
-                  />
-                </StyledCardContent>
-              </StyledCard>
-            </Grid>
-          </Grid>
 
-          <SubmitButton
-            type={'submit'}
-            size="medium"
-            variant="contained"
-            color="primary"
-            disabled={isCardLoading}
-          >
-            Сохранить
-          </SubmitButton>
-        </form>
-      </StyledFormWrapper>
+            <SubmitButton
+              type={'submit'}
+              size="medium"
+              variant="contained"
+              color="primary"
+              disabled={isCardLoading}
+            >
+              Сохранить
+            </SubmitButton>
+          </form>
+        </StyledFormWrapper>
+      )}
     </StyledPage>
   );
 });
@@ -223,11 +235,13 @@ const mapStateToProps = (state) => ({
   isCardLoading: getIsCardLoading(state),
   isCardLoaded: getIsCardLoaded(state),
   loadingError: getCardLoadingError(state),
+  isCardUpdate: getIsCardUpdate(state),
 });
 
 const mapDispatchToProps = {
   postCardRequest,
   getCardRequest,
+  resetUpdateCard,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
