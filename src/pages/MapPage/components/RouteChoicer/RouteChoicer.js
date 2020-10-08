@@ -16,13 +16,21 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import RouteAutocomplete from './components/RouteAutocomplete';
 
+const FROM_ADDRESS = 'fromAddress';
+const TO_ADDRESS = 'toAddress';
+
+const AUTOCOMPLETE_LIST = [
+  { id: 1, name: FROM_ADDRESS, label: 'Откуда' },
+  { id: 2, name: TO_ADDRESS, label: 'Куда' },
+];
+
 const schema = yup.object().shape({
-  fromAddress: yup
+  [FROM_ADDRESS]: yup
     .string()
     .default(null)
     .required('Обязательное для заполнения поле')
     .nullable(),
-  toAddress: yup
+  [TO_ADDRESS]: yup
     .string()
     .default(null)
     .required('Обязательное для заполнения поле')
@@ -44,6 +52,12 @@ const RouteChoicer = ({
     resolver: yupResolver(schema),
   });
 
+  const isSubmitDisabled = () => {
+    return isLoading
+      ? true
+      : !(!!getValues(TO_ADDRESS) && !!getValues(FROM_ADDRESS));
+  };
+
   const onSubmit = (data) => {
     getRouteRequest(data);
   };
@@ -52,8 +66,8 @@ const RouteChoicer = ({
     resetRoute();
     setOrderPlaced(false);
     reset({
-      fromAddress: null,
-      toAddress: null,
+      [FROM_ADDRESS]: null,
+      [TO_ADDRESS]: null,
     });
   };
 
@@ -76,41 +90,29 @@ const RouteChoicer = ({
       ) : (
         <StyledWrapper elevation={3}>
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <RouteAutocomplete
-              options={{
-                name: 'fromAddress',
-                label: 'Откуда',
-                isLoading,
-                addresses,
-              }}
-              formData={{
-                control,
-                error: errors.fromAddress,
-                trigger,
-                getValues,
-              }}
-            />
-
-            <RouteAutocomplete
-              options={{
-                name: 'toAddress',
-                label: 'Куда',
-                isLoading,
-                addresses,
-              }}
-              formData={{
-                control,
-                error: errors.toAddress,
-                trigger,
-                getValues,
-              }}
-            />
+            {AUTOCOMPLETE_LIST.map(({ id, name, label }) => (
+              <RouteAutocomplete
+                key={id}
+                options={{
+                  name,
+                  label,
+                  isLoading,
+                  addresses,
+                }}
+                formData={{
+                  control,
+                  error: errors[name],
+                  trigger,
+                  getValues,
+                }}
+              />
+            ))}
 
             <StyledButton
               type="submit"
               variant="contained"
               color="primary"
-              disabled={isLoading}
+              disabled={isSubmitDisabled()}
               fullWidth
             >
               Вызвать такси
