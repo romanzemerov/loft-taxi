@@ -62,7 +62,6 @@ const LoginPage = ({ isLoading, errorMessage, loginRequest, clearError }) => {
                   inputProps={{
                     'data-testid': 'input-email',
                   }}
-                  defaultValue={'testtestovich5@test.test'}
                   inputRef={register}
                   error={!!errors.email}
                   helperText={errors?.email?.message}
@@ -80,7 +79,6 @@ const LoginPage = ({ isLoading, errorMessage, loginRequest, clearError }) => {
                     'data-testid': 'input-password',
                   }}
                   margin={'normal'}
-                  defaultValue={'testtest'}
                   error={!!errors.password}
                   helperText={errors?.password?.message}
                   inputRef={register}
