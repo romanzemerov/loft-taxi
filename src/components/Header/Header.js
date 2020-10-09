@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Container, Toolbar } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import { logout } from 'redux/auth/actions';
@@ -19,7 +20,6 @@ const NAV_LIST = [
 
 const Header = ({ location, history, logout }) => {
   const activePage = location.pathname.slice(1);
-
   const handleClick = (e) => {
     const linkTo = e.currentTarget.dataset.linkTo;
 
@@ -35,7 +35,13 @@ const Header = ({ location, history, logout }) => {
       <Container>
         <Toolbar>
           <StyledAppBarInner>
-            <Logo />
+            {activePage === 'map' ? (
+              <Logo />
+            ) : (
+              <Link to={'/map'}>
+                <Logo />
+              </Link>
+            )}
             <StyledNav>
               <StyledNavList>
                 {NAV_LIST.map(({ id, label, linkTo }) => {
