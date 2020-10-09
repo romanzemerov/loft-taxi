@@ -14,3 +14,8 @@ export const getUserToken = createSelector(
   (state) => state.auth.user,
   ({ token }) => token,
 );
+
+export const getError = createSelector(
+  (state) => state.auth.error,
+  (error) => error,
+);

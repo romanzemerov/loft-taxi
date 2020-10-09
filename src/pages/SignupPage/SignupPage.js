@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getIsLoading } from 'redux/auth/selectors';
-import { registerRequest } from 'redux/auth/actions';
+import { getError, getIsLoading } from 'redux/auth/selectors';
+import { clearError, registerRequest } from 'redux/auth/actions';
 import { Link as MaterialLink, Grid, TextField } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import {
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import ErrorMessage from 'components/ErrorMessage';
 
 const schema = yup.object().shape({
   email: yup
@@ -31,7 +32,12 @@ const schema = yup.object().shape({
     .required('Обязательное для заполнения поле'),
 });
 
-const SignupPage = ({ isLoading, registerRequest }) => {
+const SignupPage = ({
+  isLoading,
+  errorMessage,
+  registerRequest,
+  clearError,
+}) => {
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -126,6 +132,9 @@ const SignupPage = ({ isLoading, registerRequest }) => {
             >
               Зарегистрироваться
             </StyledButton>
+            {errorMessage ? (
+              <ErrorMessage text={errorMessage} cb={clearError} />
+            ) : null}
           </form>
         </StyledForm>
       </StyledFormWrapper>
@@ -135,15 +144,22 @@ const SignupPage = ({ isLoading, registerRequest }) => {
 
 SignupPage.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.instanceOf(null),
+  ]),
   registerRequest: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isLoading: getIsLoading(state),
+  errorMessage: getError(state),
 });
 
 const mapDispatchToProps = {
   registerRequest,
+  clearError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignupPage);

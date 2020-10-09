@@ -6,6 +6,7 @@ import {
   registerRequest,
   registerSuccess,
   registerFailure,
+  clearError,
   logout,
 } from './actions';
 
@@ -125,6 +126,24 @@ describe('Auth reducer', () => {
         user: null,
         error: 'test error message',
       });
+    });
+  });
+
+  it('should return clear error state', () => {
+    const initialState = {
+      isLoading: false,
+      isLoggedIn: false,
+      user: null,
+      error: 'testError',
+    };
+
+    const state = authReducer(initialState, clearError());
+
+    expect(state).toEqual({
+      isLoading: false,
+      isLoggedIn: false,
+      user: null,
+      error: null,
     });
   });
 });

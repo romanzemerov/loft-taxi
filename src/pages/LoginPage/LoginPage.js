@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getIsLoading } from 'redux/auth/selectors';
-import { loginRequest } from 'redux/auth/actions';
+import { getIsLoading, getError } from 'redux/auth/selectors';
+import { loginRequest, clearError } from 'redux/auth/actions';
 import { Link as MaterialLink, TextField, Grid } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import {
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import ErrorMessage from 'components/ErrorMessage';
 
 const schema = yup.object().shape({
   email: yup
@@ -26,7 +27,7 @@ const schema = yup.object().shape({
   password: yup.string().required('Обязательное для заполнения поле'),
 });
 
-const LoginPage = ({ isLoading, loginRequest }) => {
+const LoginPage = ({ isLoading, errorMessage, loginRequest, clearError }) => {
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -95,6 +96,10 @@ const LoginPage = ({ isLoading, loginRequest }) => {
             >
               Войти
             </StyledButton>
+
+            {errorMessage ? (
+              <ErrorMessage text={errorMessage} cb={clearError} />
+            ) : null}
           </form>
         </StyledForm>
       </StyledFormWrapper>
@@ -104,15 +109,22 @@ const LoginPage = ({ isLoading, loginRequest }) => {
 
 LoginPage.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.instanceOf(null),
+  ]),
   loginRequest: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isLoading: getIsLoading(state),
+  errorMessage: getError(state),
 });
 
 const mapDispatchToProps = {
   loginRequest,
+  clearError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

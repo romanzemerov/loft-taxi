@@ -2,6 +2,7 @@ import {
   getIsLoggedIn,
   getIsLoading,
   getUserToken,
+  getError,
 } from 'redux/auth/selectors';
 
 describe('Auth selectors', () => {
@@ -32,5 +33,18 @@ describe('Auth selectors', () => {
     };
 
     expect(getUserToken(TEST_STATE)).toBe('testToken');
+  });
+
+  it('should return error message ', () => {
+    const TEST_STATE = {
+      auth: {
+        isLoading: false,
+        isLoggedIn: false,
+        user: null,
+        error: 'testError',
+      },
+    };
+
+    expect(getError(TEST_STATE)).toBe('testError');
   });
 });

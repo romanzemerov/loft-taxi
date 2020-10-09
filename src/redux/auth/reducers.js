@@ -6,6 +6,7 @@ import {
   registerRequest,
   registerSuccess,
   registerFailure,
+  clearError,
   logout,
 } from 'redux/auth/actions';
 
@@ -50,6 +51,9 @@ const auth = createReducer(initialState, {
     state.isLoggedIn = false;
     state.user = null;
     state.error = payload;
+  },
+  [clearError]: (state) => {
+    state.error = null;
   },
   [logout]: (state) => {
     state.isLoading = false;
