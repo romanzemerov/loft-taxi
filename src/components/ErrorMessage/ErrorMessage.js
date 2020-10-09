@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Snackbar } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const defaultTheme = createMuiTheme();
 
@@ -26,6 +27,11 @@ const ErrorMessage = ({ text, cb }) => {
       </Snackbar>
     </MuiThemeProvider>
   );
+};
+
+ErrorMessage.propTypes = {
+  text: PropTypes.string.isRequired,
+  cb: PropTypes.func,
 };
 
 export default ErrorMessage;
