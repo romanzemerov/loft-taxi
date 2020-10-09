@@ -50,8 +50,8 @@ const schema = yup.object().shape({
     .required('Обязательное для заполнения поле'),
   secretCode: yup
     .string()
-    .length(3, 'CVC-код состоять из трех символов')
-    .required('Обязательное для заполнения поле'),
+    .required('Обязательное для заполнения поле')
+    .length(3, 'CVC-код состоять из трех символов'),
 });
 
 const normalizeCardNumber = (value) => {
@@ -186,6 +186,7 @@ const ProfilePage = memo(function ProfilePage({
                       error={!!errors.secretCode}
                       helperText={errors?.secretCode?.message}
                       defaultValue={creditCard.secretCode}
+                      inputProps={{ maxLength: 3 }}
                     />
                   </StyledCardContent>
                 </StyledCard>
