@@ -12,6 +12,13 @@ const typeToContent = {
     buttonLabel: 'Добавить карту',
     linkTo: '/profile',
   },
+  successAddedCard: {
+    headerText: 'Профиль',
+    description:
+      'Платёжные данные обновлены. Теперь вы можете заказывать такси.',
+    buttonLabel: 'Заказать такси',
+    linkTo: '/map',
+  },
   orderPlaced: {
     headerText: 'Заказ размещён',
     description:

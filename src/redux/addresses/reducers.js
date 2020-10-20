@@ -1,4 +1,4 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   getAddressesRequest,
   getAddressesSuccess,
@@ -27,20 +27,5 @@ const addresses = createReducer(initialState, {
     state.error = payload;
   },
 });
-
-export const getIsLoading = createSelector(
-  (state) => state.addresses.isLoading,
-  (isLoading) => isLoading,
-);
-
-export const getAddresses = createSelector(
-  (state) => state.addresses.list,
-  (list) => list,
-);
-
-export const getIsAddressesLoaded = createSelector(
-  (state) => state.addresses.list,
-  (list) => !!list.length,
-);
 
 export default addresses;

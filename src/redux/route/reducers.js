@@ -1,4 +1,4 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   getRouteRequest,
   getRouteSuccess,
@@ -33,15 +33,5 @@ const route = createReducer(initialState, {
     state.error = null;
   },
 });
-
-export const getIsLoading = createSelector(
-  (state) => state.addresses.isLoading,
-  (isLoading) => isLoading,
-);
-
-export const getRoute = createSelector(
-  (state) => state.route.coords,
-  (coords) => coords,
-);
 
 export default route;

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getIsLoading } from 'redux/auth/reducers';
-import { registerRequest } from 'redux/auth/actions';
-import { Link as MaterialLink } from '@material-ui/core';
+import { getError, getIsLoading } from 'redux/auth/selectors';
+import { clearError, registerRequest } from 'redux/auth/actions';
+import { Link as MaterialLink, Grid, TextField } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
 import {
@@ -12,30 +12,39 @@ import {
   StyledForm,
   StyledHeader,
   StyledSubHeader,
-  StyledSection,
-  StyledInput,
   StyledButton,
 } from './Styled';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import ErrorMessage from 'components/ErrorMessage';
 
-const SignupPage = ({ isLoading, registerRequest }) => {
-  const [{ email, password, name, surname }, setUser] = useState({
-    email: '',
-    password: '',
-    name: '',
-    surname: '',
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Некорректный email')
+    .required('Обязательное для заполнения поле'),
+  name: yup.string().required('Обязательное для заполнения поле'),
+  surname: yup.string().required('Обязательное для заполнения поле'),
+  password: yup
+    .string()
+    .min(8, 'Пароль должен содержать минимум 8 симоволов')
+    .required('Обязательное для заполнения поле'),
+});
+
+const SignupPage = ({
+  isLoading,
+  errorMessage,
+  registerRequest,
+  clearError,
+}) => {
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
   });
 
-  const handleInputChange = ({ target }) => {
-    const { name, value } = target;
-    setUser((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    registerRequest({ email, password, name, surname });
+  const onSubmit = (data) => {
+    registerRequest(data);
   };
 
   return (
@@ -49,57 +58,67 @@ const SignupPage = ({ isLoading, registerRequest }) => {
               &nbsp;Уже зарегистрированы?
             </MaterialLink>
           </StyledSubHeader>
-          <form onSubmit={handleSubmit}>
-            <StyledInput
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <TextField
               type="email"
               name="email"
               id="email"
               label="Адрес электронной почты"
+              margin="normal"
               fullWidth
-              value={email}
-              onChange={handleInputChange}
               required
+              error={!!errors.email}
+              helperText={errors?.email?.message}
+              inputRef={register}
               inputProps={{
                 'data-testid': 'input-email',
               }}
             />
-            <StyledSection>
-              <StyledInput
-                type="text"
-                name="name"
-                id="name"
-                label="Имя"
-                fullWidth
-                value={name}
-                onChange={handleInputChange}
-                required
-                inputProps={{
-                  'data-testid': 'input-name',
-                }}
-              />
-              <StyledInput
-                type="text"
-                name="surname"
-                id="surname"
-                label="Фамилия"
-                fullWidth
-                value={surname}
-                onChange={handleInputChange}
-                required
-                inputProps={{
-                  'data-testid': 'input-surname',
-                }}
-              />
-            </StyledSection>
-            <StyledInput
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="text"
+                  name="name"
+                  id="name"
+                  label="Имя"
+                  margin="normal"
+                  required
+                  error={!!errors.name}
+                  helperText={errors?.name?.message}
+                  inputRef={register}
+                  inputProps={{
+                    'data-testid': 'input-name',
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="text"
+                  name="surname"
+                  id="surname"
+                  label="Фамилия"
+                  margin="normal"
+                  required
+                  error={!!errors.surname}
+                  helperText={errors?.surname?.message}
+                  inputRef={register}
+                  inputProps={{
+                    'data-testid': 'input-surname',
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <TextField
               type="password"
               name="password"
               id="password"
               label="Пароль"
+              margin="normal"
               fullWidth
-              value={password}
-              onChange={handleInputChange}
               required
+              error={!!errors.password}
+              helperText={errors?.password?.message}
+              inputRef={register}
               inputProps={{
                 'data-testid': 'input-password',
               }}
@@ -113,6 +132,9 @@ const SignupPage = ({ isLoading, registerRequest }) => {
             >
               Зарегистрироваться
             </StyledButton>
+            {errorMessage ? (
+              <ErrorMessage text={errorMessage} cb={clearError} />
+            ) : null}
           </form>
         </StyledForm>
       </StyledFormWrapper>
@@ -122,15 +144,22 @@ const SignupPage = ({ isLoading, registerRequest }) => {
 
 SignupPage.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.instanceOf(null),
+  ]),
   registerRequest: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isLoading: getIsLoading(state),
+  errorMessage: getError(state),
 });
 
 const mapDispatchToProps = {
   registerRequest,
+  clearError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignupPage);

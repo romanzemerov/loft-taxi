@@ -6,8 +6,9 @@ import { Provider } from 'react-redux';
 import { store } from 'redux/store';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import { theme } from 'loft-taxi-mui-theme';
+import { CssBaseline } from '@material-ui/core';
 import { GlobalStyles } from 'GlobalStyles';
+import { theme } from 'loft-taxi-mui-theme';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={LuxonUtils}>
             <App />
+            <CssBaseline />
             <GlobalStyles />
           </MuiPickersUtilsProvider>
         </ThemeProvider>

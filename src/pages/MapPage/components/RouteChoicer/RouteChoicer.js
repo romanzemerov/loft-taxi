@@ -1,17 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import InfoBox from 'components/InfoBox';
-import { TextField } from '@material-ui/core';
 import {
   getAddresses,
-  getIsLoading,
   getIsAddressesLoaded,
-} from 'redux/addresses/reducers';
-import { getRoute } from 'redux/route/reducers';
+  getIsLoading,
+} from 'redux/addresses/selectors';
+import { getRoute } from 'redux/route/selectors';
 import { getAddressesRequest } from 'redux/addresses/actions';
 import { getRouteRequest, resetRoute } from 'redux/route/actions';
 import PropTypes from 'prop-types';
-import { StyledWrapper, StyledAutocomplete, StyledButton } from './Styled';
+import { StyledButton, StyledWrapper } from './Styled';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import RouteAutocomplete from './components/RouteAutocomplete';
+
+const FROM_ADDRESS = 'fromAddress';
+const TO_ADDRESS = 'toAddress';
+
+const AUTOCOMPLETE_LIST = [
+  { id: 1, name: FROM_ADDRESS, label: 'Откуда' },
+  { id: 2, name: TO_ADDRESS, label: 'Куда' },
+];
+
+const schema = yup.object().shape({
+  [FROM_ADDRESS]: yup
+    .string()
+    .default(null)
+    .required('Обязательное для заполнения поле')
+    .nullable(),
+  [TO_ADDRESS]: yup
+    .string()
+    .default(null)
+    .required('Обязательное для заполнения поле')
+    .nullable(),
+});
 
 const RouteChoicer = ({
   isLoading,
@@ -22,36 +46,29 @@ const RouteChoicer = ({
   getRouteRequest,
   resetRoute,
 }) => {
-  const [fromAddress, setFromAddress] = useState(null);
-  const [toAddress, setToAddress] = useState(null);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const { handleSubmit, errors, control, trigger, getValues, reset } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
+  });
 
-  const filterAutocompleteOptions = (options) => {
-    return options
-      ? options.filter(
-          (address) => address !== toAddress && address !== fromAddress,
-        )
-      : options;
+  const isSubmitDisabled = () => {
+    return isLoading
+      ? true
+      : !(!!getValues(TO_ADDRESS) && !!getValues(FROM_ADDRESS));
   };
 
-  const handleFromAddressChange = (event, value) => {
-    setFromAddress(value);
-  };
-
-  const handleToAddressChange = (event, value) => {
-    setToAddress(value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    getRouteRequest({ fromAddress, toAddress });
+  const onSubmit = (data) => {
+    getRouteRequest(data);
   };
 
   const resetSubmit = () => {
     resetRoute();
     setOrderPlaced(false);
-    setFromAddress(null);
-    setToAddress(null);
+    reset({
+      [FROM_ADDRESS]: null,
+      [TO_ADDRESS]: null,
+    });
   };
 
   useEffect(() => {
@@ -72,37 +89,30 @@ const RouteChoicer = ({
         <InfoBox type={'orderPlaced'} onClickButton={resetSubmit} />
       ) : (
         <StyledWrapper elevation={3}>
-          <form onSubmit={handleSubmit}>
-            <StyledAutocomplete
-              id={'fromAddress'}
-              name={'fromAddress'}
-              options={addresses}
-              renderInput={(params) => (
-                <TextField {...params} label="Откуда" required />
-              )}
-              filterOptions={filterAutocompleteOptions}
-              value={fromAddress}
-              onChange={handleFromAddressChange}
-              disabled={isLoading}
-            />
-            <StyledAutocomplete
-              id={'toAddress'}
-              name={'toAddress'}
-              options={addresses}
-              getOptionLabel={(option) => option}
-              renderInput={(params) => (
-                <TextField {...params} label="Куда" required />
-              )}
-              filterOptions={filterAutocompleteOptions}
-              value={toAddress}
-              onChange={handleToAddressChange}
-              disabled={isLoading}
-            />
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            {AUTOCOMPLETE_LIST.map(({ id, name, label }) => (
+              <RouteAutocomplete
+                key={id}
+                options={{
+                  name,
+                  label,
+                  isLoading,
+                  addresses,
+                }}
+                formData={{
+                  control,
+                  error: errors[name],
+                  trigger,
+                  getValues,
+                }}
+              />
+            ))}
+
             <StyledButton
               type="submit"
               variant="contained"
               color="primary"
-              disabled={isLoading}
+              disabled={isSubmitDisabled()}
               fullWidth
             >
               Вызвать такси

@@ -1,4 +1,4 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   loginRequest,
   loginSuccess,
@@ -6,6 +6,7 @@ import {
   registerRequest,
   registerSuccess,
   registerFailure,
+  clearError,
   logout,
 } from 'redux/auth/actions';
 
@@ -51,6 +52,9 @@ const auth = createReducer(initialState, {
     state.user = null;
     state.error = payload;
   },
+  [clearError]: (state) => {
+    state.error = null;
+  },
   [logout]: (state) => {
     state.isLoading = false;
     state.isLoggedIn = false;
@@ -58,20 +62,5 @@ const auth = createReducer(initialState, {
     state.error = null;
   },
 });
-
-export const getIsLoggedIn = createSelector(
-  (state) => state.auth.isLoggedIn,
-  (isLoggedIn) => isLoggedIn,
-);
-
-export const getIsLoading = createSelector(
-  (state) => state.auth.isLoading,
-  (isLoading) => isLoading,
-);
-
-export const getUserToken = createSelector(
-  (state) => state.auth.user,
-  ({ token }) => token,
-);
 
 export default auth;
